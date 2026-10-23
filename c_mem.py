@@ -1,0 +1,193 @@
+# -*- coding: utf-8 -*-
+from core import *
+from c_common import *
+from c_hcdata import HCD
+from libs import rdet,hc_rows,bc_rows,dort_rows
+from c_titles import HC52,BC37,BC_GROUPS,PART_RANGE,DORT_SUB
+
+FLIPS=[
+ ("HC 问1：你唯一的安慰是什么？", Q("HC 1","我的身体和灵魂都不属于我自己，而属于我信实的救主耶稣基督")+"。三重内容：罪债已还、脱离魔鬼权势、天父保守。"),
+ ("HC 的三部分（罪·救·谢）", "愁苦（主日1–4，问1–11）→ 得救（主日5–31，问12–85）→ 感恩（主日32–52，问86–129）。问2已预告这三件事。"),
+ ("HC 21：真信心是什么？", Q("HC 21","真信心是一种确知")+"＋"+Q("HC 21","同时，真信心也是一种确信")+"：知道，并且“也赐给了我”。"),
+ ("HC 60–61：怎样称义？", "唯独藉着真心信靠耶稣基督；"+Q("HC 61","不是因为我的信心有什么价值，而是唯独因着基督的顺服、义和圣洁")+"。"),
+ ("HC 74：婴孩为什么受洗？", Q("HC 74","因为他们与父母同属于神的圣约和教会")+"；洗礼取代了割礼。"),
+ ("HC 103：第四诫", "宣讲福音与办学；"+Q("HC 103","特别在安息日，我当积极去神的教会聆听神的话语，参加圣礼")+"；一生让圣灵作工，今生开始永恒的安息。"),
+ ("BC 的年代与作者", "1561 年，德布利主笔；他 1567 年殉道（CCI）。BC 呈送国王时附有申辩与请愿。"),
+ ("BC 的七群", "神 · 圣经 · 创造与人 · 基督与拣选 · 救恩的应用 · 教会与圣礼 · 政府与末日（本站分组）。"),
+ ("BC 7：圣经充分", Q("BC 7","我们相信，圣经中包含了神全部的旨意")+"；人的著作、风俗、会议决议不与圣经同等。"),
+ ("BC 9：接受哪些信经", Q("BC 9","我们甘愿接受《使徒信经》、《尼西亚信经》和《亚他拿修信经》")+"。"),
+ ("BC 29：真教会的标志", "纯正宣讲福音；按基督设立施行圣礼；执行教会纪律（"+Q("BC 29","她按照神纯全的话语管理教会")+"）。"),
+ ("BC 36 的版本史", "CCI 注：一句话（偶像崇拜与虚假敬拜要被除去，敌基督的国要被消灭）于 1905 年在荷兰改革宗教会（Gereformeerde Kerken in Nederland）总会上被删除。"),
+ ("多特信经的结构", "四项教义（第三、四项合一），63 个条目；每项末尾是“错谬反驳”。CCI 页面没有序言与结语。"),
+ ("TULIP 是什么", "后来英语世界的记忆口诀（约），不是多特的结构；多特用四项＋正反两面（见第四部分 4.5）。"),
+ ("Dort 1.7：拣选的定义", Q("DORT 1.7","在创立世界以先，神就根据他的主权和美意，在基督里")+"……"),
+ ("Dort 2.5：福音怎样宣讲", Q("DORT 2.5","不加分别地对万国万民，即普世的人宣讲")+"。"),
+ ("Dort 3-4.12：重生", Q("DORT 3-4.12","重生也是神的大能，并不亚于创世之工或使死人复活")+"。"),
+ ("Dort 3-4.16：自由意志", "CCI 标题：人的自由意志不是被剥夺了，而是被更新了。"),
+ ("Dort 5.9：确信", Q("DORT 5.9","信徒自己能够对选民蒙保守得救恩和真信徒能持守信仰有十足的把握")+"；5.11：确信并非总能感受到。"),
+ ("错谬反驳的格式", "“错谬一：……　驳斥：……”：先列对方的说法，再用圣经驳斥。共 34 条（9+7+9+9）。"),
+ ("签署书", "牧师、长老、执事签署：三份文件的全部教义“完全符合圣经”；有异议先告知会议；上诉权。"),
+ ("教会规章第52条", M("co52","长老会当确保教会每个主日宣讲一次《海德堡要理问答》所概括总结的圣经教义")+"。"),
+ ("“行为之约”在哪里？", "三项联合信条里只出现一次：Dort 2.10 错谬二（"+Q("DORT 2.10","无论是恩典之约还是行为之约")+"）。"),
+ ("三种体裁", "告白（BC：我们相信）· 要理问答（HC：我）· 会议裁决（Dort：我们断定）。"),
+]
+QUIZ=[
+ ("海德堡要理问答的三部分依次是？",["感恩、愁苦、得救","愁苦（罪）、得救、感恩","创造、堕落、救赎"],1),
+ ("HC 共有多少个主日？",["40","52","66"],1),
+ ("谁是比利时信条的主笔？",["加尔文","乌尔西努","德布利（Guido de Brès）"],2),
+ ("BC 第9条说接受哪三份古代信经？",["使徒、尼西亚、亚他拿修","使徒、迦克墩、特兰托","尼西亚、奥格斯堡、威斯敏斯特"],0),
+ ("多特信经按几项教义编排？",["五项","四项（第三、四合一）","七项"],1),
+ ("“TULIP”与多特信经的关系？",["多特信经原文的章节名","后来英语世界的记忆口诀，不是多特原有结构","多特大会的议事规则"],1),
+ ("HC 问1里“唯一的安慰”是：",["我的身体和灵魂不属于我自己，而属于我的救主耶稣基督","我已经做了足够多的善事","教会会保护我"],0),
+ ("BC 29 所列“真教会的标志”不包括：",["纯正宣讲福音","按基督设立施行圣礼","拥有最多信徒"],2),
+ ("Dort 2.5 对福音宣告的要求是：",["只对已被拣选的人宣讲","不加分别地对万国万民宣讲","只在教会内部宣讲"],1),
+ ("多特大会召开于：",["1517","1618–1619","1648"],1),
+ ("按 CCI，签署书要求签署者相信三份文件的教义“完全符合”：",["教会传统","圣经","国家法律"],1),
+ ("“行为之约”一词在三项联合信条中出现于：",["BC 14","HC 6","Dort 2.10 的错谬二"],2),
+ ("HC 21 对“真信心”的定义包括：",["只有知识","知识与确信（也赐给了我）","只有行为"],1),
+ ("按 CCI 的注释，BC 36 被删的一句话是在哪一年被荷兰的教会总会删除的？",["1905","1618","1834"],0),
+ ("HC 是应哪位君王之请编写的？",["腓力二世","腓德烈三世","威廉一世"],1),
+]
+WEEKS_D={38:("1.1–1.6","1",1,6),39:("1.7–1.12","1",7,12),40:("1.13–1.18","1",13,18),41:("1 驳 + 2.1–2.4","1",19,19),42:("2.5–2.9","2",5,9),43:("2 驳 + 3-4.1–3-4.4","2",10,10),44:("3-4.5–3-4.10","3-4",5,10),45:("3-4.11–3-4.17","3-4",11,17),46:("3-4 驳","3-4",18,18),47:("5.1–5.5","5",1,5),48:("5.6–5.10","5",6,10),49:("5.11–5.15","5",11,15),50:("5 驳","5",16,16)}
+def plan():
+    rows=[]
+    for n in range(1,53):
+        a,b_=HCRANGE[n]
+        hc=f'{hl(n,"LD "+str(n))}（问{a}–{b_}）{HC52[n][0]}'
+        if n<=37: co=f'{bl(n,"BC "+str(n))} {BCT[n]}'
+        elif n in WEEKS_D:
+            lab,h,lo,hi=WEEKS_D[n]
+            if n==41: co=f'{dl("1",19,"Dort 1 驳")} + {dl("2",1,"2.1")}–{dl("2",4,"2.4")}'
+            elif n==43: co=f'{dl("2",10,"Dort 2 驳")} + {dl("3-4",1,"3-4.1")}–{dl("3-4",4,"3-4.4")}'
+            elif lo==hi: co=dl(h,lo,f"Dort {h} 驳")
+            else: co=f'{dl(h,lo,f"Dort {h}.{lo}")}–{dl(h,hi,str(hi))}'
+        elif n==51: co=f'错谬反驳总览：{dre("1")} · {dre("2")} · {dre("3-4")} · {dre("5")}'
+        else: co=f'总复习：{bl(37,"BC 37")} · {dl("5",9,"Dort 5.9")}–{dl("5",15,"5.15")} · {hq(1,"HC 问1")}'
+        rows.append([str(n),hc,co,"周一读正文，周二读概要与应用，周三背一问，周四写三句，周日听讲道时对照" if n==1 else ""])
+    return rows
+
+PC={"总纲":"p0","困苦":"p1","拯救":"p2","感恩":"p3"}
+def mi(key,cls,href,b,t,sm):
+    return f'<div class="mi {cls}" data-k="{key}"><a href="{href}"><b>{b}</b>{t}<small>{sm}</small></a><input type="checkbox" aria-label="已背熟：{b} {t}"></div>'
+def ring(label):
+    return f'<div class="mring" data-mring="{label}"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="rb"/><circle cx="60" cy="60" r="52" class="rf" pathLength="100" stroke-dasharray="0 100"/></svg><div><b class="mn1">0</b> / <b class="mn2">0</b> 已背熟<br><small>勾选保存在本机浏览器（localStorage），不上传。</small></div></div>'
+def titles_l2():
+    out=""
+    # 52 主日
+    x=ring("hc")+'<p>标题与第二部分 2.8、原文库第七部分使用<b>同一份</b>52 个主日标题；点标题跳到对应讲解，右侧勾选“已背熟”会让罗盘上的弧段变亮。口诀＝每个主日三个关键词。</p>'
+    for part,lab,lo,hi in PART_RANGE:
+        items="".join(mi(f"hc{n}",PC[part],f"hc.html#hd-ld{n}",f"主日{n}",HC52[n][0],f"问{HCRANGE[n][0]}–{HCRANGE[n][1]} · {HC52[n][2]}").replace('<div class="mi','<div id="mm-ld%d" class="mi'%n,1) for n in range(lo,hi+1))
+        x+=L3(f"mm-p{PC[part]}",f"{lab}（主日{lo}"+(f"–{hi}" if hi!=lo else "")+"）",f'<div class="mst">{items}</div>',"list",cls="mmg")
+    out+=L2("mem-52","11.2","52 主日标题速记（可勾选“已背熟”）",x)
+    # BC 37
+    x=ring("bc")+'<p>37 条的短标题（本站学习标题）与口诀；CCI 的正式条目标题见第八部分。</p>'
+    for gid,lab,col,lo,hi,ico in BC_GROUPS:
+        items="".join(mi(f"bc{n}","p2",f"bct.html#bc-{n}",f"第{n}条",BC37[n][0],BC37[n][1]) for n in range(lo,hi+1))
+        x+=L3(f"mm-bc{gid}",f"{lab}（第{lo}–{hi}条）",f'<div class="mst">{items}</div>',ico,cls="mmg")
+    out+=L2("mem-bc","11.3","比利时信条 37 条标题速记",x)
+    # Dort
+    x='<p>四项教义各分若干子主题；每个子主题对应 CCI 条目号范围，点开到原文。</p>'
+    for h in J("dort")["heads"]:
+        sub=DORT_SUB[h["id"]]
+        li="".join(f'<li style="--c:#d4af37"><b>{r}</b><span><b>{t}</b>：{kw}</span><a href="dtt.html#dort-{h["id"]}-{lo}">原文</a></li>' for r,t,kw,lo,hi in sub)
+        li+=f'<li style="--c:#e07a5f"><b>驳</b><span><b>错谬反驳</b>：逐条驳斥抗辩派的错谬</span><a href="dtt.html#dort-{h["id"]}-{len(h["items"])}">原文</a></li>'
+        x+=L3(f"mm-dt{h['id']}",h["title"],f'<ul class="subth">{li}</ul>',"shield",cls="mmg")
+    out+=L2("mem-dt","11.4","多特信经四项标题速记",x)
+    # 经文速查（紧凑行内编号；文字逐字取自 CCI 数据）
+    x='<p>下列经文参考<b>逐字取自 CCI 原页</b>，一行一个主日／条／项，编号徽章行内连读；点开每组即可。每行都与第七至九部分原文页的“经文参考”一致。</p>'
+    for part,lab,lo,hi in PART_RANGE:
+        rows=[]
+        for n in range(lo,hi+1):
+            r=hc_rows(n); fl=[v for _,l in r for v in l]
+            if fl: rows.append((f"主日{n}",fl))
+        x+=L3(f"mm-rh{PC[part]}",f"HC 经文速查 · {lab}（主日{lo}"+(f"–{hi}" if hi!=lo else "")+"）",rdet(f"主日{lo}"+(f"–{hi}" if hi!=lo else ""),rows,sum(len(l) for _,l in rows)),"book",cls="mmg")
+    for gid,lab,col,lo,hi,ico in BC_GROUPS:
+        rows=[r for n in range(lo,hi+1) for r in bc_rows(n)]
+        x+=L3(f"mm-rb{gid}",f"BC 经文速查 · {lab}（第{lo}–{hi}条）",rdet(f"第{lo}–{hi}条",rows,sum(len(l) for _,l in rows)),"scroll",cls="mmg")
+    for h in J("dort")["heads"]:
+        rows=dort_rows(h["id"],1,len(h["items"]))
+        x+=L3(f"mm-rd{h['id']}",f"Dort 经文速查 · {h['title']}",rdet(h["title"].split(" ")[0],rows,sum(len(l) for _,l in rows)),"shield",cls="mmg")
+    out+=L2("mem-rf","11.5","经文参考速查（HC · BC · Dort，逐字取自 CCI）",x)
+    return out
+
+def core_l2():
+    from c_core import HC_CORE,BC_CORE,DORT_CORE,AP_CORE,NI_CORE,AT_CORE,core_tbl
+    from c_titles import PART_RANGE,BC_GROUPS
+    from c_common import _dt
+    import creedlib as CL
+    x=('<p>每个主日、每条信条、每项教义和每个信经条目各配一组：<b>🎯 核心一句</b>（抓住本质）、<b>🧠 记忆钩</b>（口诀、数字、前后对比）、（“为何重要”在各深读页）。本站学习用语，非 CCI 原文；编号可点回深读页。</p>'
+       +'<div class="legend"><span class="cwk k1">🎯 核心</span><span class="cwk k2">🧠 记忆钩</span></div>')
+    for k,lab,lo,hi in PART_RANGE:
+        rows=[(f"主日{n}",HC52[n][0],HC_CORE[n],f"hc.html#hd-ld{n}") for n in range(lo,hi+1)]
+        x+=L3(f"mr-hc{PC[k]}",f"HC 核心速记 · {lab}（主日{lo}"+(f"–{hi}" if hi!=lo else "")+"）",core_tbl(rows,why=False),"list",cls="mmg")
+    for g,lab,col,lo,hi,ico in BC_GROUPS:
+        rows=[(f"第{n}条",BC37[n][0],BC_CORE[n],f"bc.html#bx-{n}") for n in range(lo,hi+1)]
+        x+=L3(f"mr-bc{g}",f"BC 核心速记 · {lab}（第{lo}–{hi}条）",core_tbl(rows,why=False),ico,cls="mmg")
+    rows=[(f"第{h['num']}项",h["title"].split(" ",1)[-1],DORT_CORE[h["id"]],f"dort.html#dd-h{h['num']}") for h in _dt["heads"]]
+    x+=L3("mr-dt","Dort 核心速记 · 四项",core_tbl(rows,why=False),"shield",cls="mmg")
+    rows=[(f"第{n}条",CL.AP_TITLES[n][0],AP_CORE[n],f"creedsx.html#ap-a{n}") for n in range(1,13)]
+    x+=L3("mr-ap","使徒信经核心速记 · 12 条",core_tbl(rows,why=False),"scroll",cls="mmg")
+    rows=[(f"第{n}节",CL.NI_TITLES[n][0],NI_CORE[n],f"creedsx.html#ni-a{n}") for n in range(1,14)]
+    x+=L3("mr-ni","尼西亚信经核心速记 · 13 节",core_tbl(rows,why=False),"scroll",cls="mmg")
+    rows=[(f"第{lo}–{hi}点" if hi!=lo else f"第{lo}点",nm,AT_CORE[g],f"creedsx.html#at-g{g}") for g,(nm,lo,hi,gi) in CL.AT_GROUPS.items()]
+    x+=L3("mr-at","亚他那修信经核心速记 · 11 组",core_tbl(rows,why=False),"scroll",cls="mmg")
+    return L2("mem-core","11.7","核心速记总表：核心一句 · 记忆钩",x)
+def part_mem():
+    b = L2("mem-mn","11.1","口诀",
+      '<div class="mn reveal"><p><b class="hl-s">HC：罪 · 救 · 谢</b>——主日 1–4 / 5–31 / 32–52；问1 的安慰串起全书。</p>'
+      '<p><b class="hl-f">BC：神 · 经 · 人 · 基督 · 恩 · 教 · 末</b>——七群：神、圣经、创造与人、基督与拣选、救恩的应用、教会与圣礼、政府与末日。</p>'
+      '<p><b class="hl-g">Dort：一选 二赎 三四归 五守</b>——拣选、基督之死、败坏与归信、保守；每项都有“驳”。</p>'
+      '<p>年份：<b>1561 信条 · 1563 问答 · 1618–19 多特</b>——（本站口诀：信条1561、问答1563、多特1618）。</p>'
+      '<p>体裁：<b>我们相信（BC）· 我（HC）· 我们断定（Dort）</b>。</p></div>'
+      '<div class="legend"><span class="kchip">重点</span><span class="hchip">难点</span></div>')
+    mind = '<div class="mind reveal"><div class="mc">三项联合信条<br><small>一个信仰 · 三种文体</small></div><div class="mb">' + "".join(f'<div class="mbr" style="--c:{c}"><b>{t}</b><ul>' + "".join(f"<li>{x}</li>" for x in xs) + "</ul></div>" for t,xs,c in [
+      ("🛏️ HC",["1563 · 海德堡","52 主日 · 129 问","罪 · 救 · 谢","安慰"],"#81b29a"),
+      ("📜 BC",["1561 · 德布利","37 条 · 七群","圣经 · 教会标志","“我们相信”"],"#5aa9e6"),
+      ("⚖️ Dort",["1618–19 · 多特","4 项 · 63 条目","正反两面 · 驳谬误","保守的安慰"],"#d4af37"),
+      ("📖 圣经根基",["创造—堕落—救赎—成全","恩典之约","基督是中保与元首"],"#a78bfa"),
+      ("🔗 三大信经",["BC 9 接受","HC 22–58 对读使徒信经","附录原文"],"#e07a5f")]) + "</div></div>"
+    b += titles_l2()
+    b += L2("mem-mind","11.5","思维导图", mind)
+    b += L2("mem-flip","11.3","翻卡（点击翻面）", '<div class="flips">' + "".join(f'<button class="flip reveal" aria-pressed="false" type="button"><span class="fi"><span class="ff">{a}</span><span class="fb">{c}</span></span></button>' for a,c in FLIPS) + '</div><p class="fcount">已翻 <b id="fc">0</b> / '+str(len(FLIPS))+'</p>')
+    b += L2("mem-quiz","11.4",f"自测（{len(QUIZ)}题）", '<div class="quiz">' + "".join(f'<div class="qq reveal" data-ans="{a}"><p><b>{i+1}.</b> {q}</p><div class="opts">' + "".join(f'<button class="opt" data-i="{j}" type="button">{o}</button>' for j,o in enumerate(os)) + '</div></div>' for i,(q,os,a) in enumerate(QUIZ)) + f'</div><p class="score">得分：<b id="qs">0</b> / {len(QUIZ)} <button class="btn ghost" id="qreset" type="button">重做</button></p>')
+    b += L2("mem-one","11.5","一页总结",
+      table(["","比利时信条","海德堡要理问答","多特信经"],[
+        ["一句话","我们信什么","你唯一的安慰是什么","恩典如何独自拯救并保守"],
+        ["年代","1561","1563","1618–1619"],["地点","尼德兰南部","海德堡","多德雷赫特"],
+        ["人物","德布利","乌尔西努、俄利维亚努、腓德烈三世","阿米念（对手）与多特大会"],
+        ["结构","37 条","129 问 · 52 主日","4 项 · 63 条目"],
+        ["关键条目","BC 7、9、29、34","HC 1、21、60、103","Dort 1.7、2.5、3-4.12、5.9"],
+        ["体裁","告白","要理问答","会议裁决"],
+        ["用途","向外宣告","教导会众","守卫教义"]],"cmp")
+      + key("一句话总纲：<b>救恩从头到尾都是三一神的恩典；信徒的安慰，在于属于信实的救主基督，并蒙神保守到底。</b>"))
+    b += L2("mem-plan","11.6","52 周学习计划",
+      '<p>每周一个主日（HC）＋一条“伴读”：第 1–37 周配比利时信条第 n 条；第 38–50 周读多特信经；第 51 周复习错谬反驳；第 52 周总复习。每周建议：周一读正文，周二读本站讲解，周三背一问或一句，周四写三句总结，主日听讲道时对照。</p>'
+      + table(["周","海德堡（HC）","伴读（BC / Dort）","说明"],plan(),"cmp wk")
+      + app("可以和教会的 HC 讲道同步：CCI 教会规章第52条要求每个主日宣讲一次 HC 的教义。若教会按主日顺序讲，把本表第 n 周对应成你教会的第 n 个主日。"))
+    b += core_l2()
+    import c_refx
+    b += c_refx.l2("memory")
+    qa=[("神为什么不借着基督的死让所有人都得救？",f"HC 20：并不是所有人都藉基督得救，只有藉真信心与他联合、接受他一切恩惠的人才得救（{hq(20)}）。多特说明两面：不信的原因与罪责在人，不在基督的献祭（{dl('2.6')}）；基督的死照父的定旨，有效地救赎所有蒙拣选的人（{dl('2.8')}）。"),
+        ("人死后灵魂在哪里？什么是复活？",f"灵魂在死后立刻被接到元首基督那里；身体将来复活，再与灵魂联合，成为像基督荣耀的身体（{hq(57)}）。复活指的是身体，不是灵魂：灵魂没有死，身体要被唤醒（{bl(37)}）。"),
+        ("因信称义，义从何来？",f"义来自基督：他完全的补赎、义和圣洁，被神白白地归给我，好像我从未犯罪（{hq(60)}–{hq(61,'61')}）。信心只是领受的手，不是功劳（{bl(22)}–{bl(23,'23')}）。"),
+        ("HC 第三部讲行善，这不是讲重生吗？",f"正是。HC 86 说基督用宝血救赎我们之后，也藉圣灵更新我们，好叫我们用全部生命感恩；没有这更新，就没有真归正（{hq(86)}–{hq(87,'87')}，{hq(88,'88')}–{hq(90,'90')}）。感恩是重生的果子，不是得救的条件。"),
+        ("重生的人为什么还会犯罪？",f"多特第五项：重生的人今生并未完全脱离罪的辖制，每天仍有软弱的罪（{dl('5.1')}–{dl('5.2',None,'5.2')}），但神信实地保守他们到底（{dl('5.3')}）。HC 114：最圣洁的人今生也只是开始顺服（{hq(114)}）。"),
+        ("天国的钥匙是哪两把？",f"宣讲圣洁的福音和教会惩戒；藉这两样，天国向信的人开、向不信的人关（{hq(83)}–{hq(85,'85')}）。"),
+        ("为什么称他为“基督”？",f"基督就是受膏者：父立他作我们的大先知、独一的大祭司、永远的君王（{hq(31)}）；信徒因与他联合，也有份于这三个职分（{hq(32)}）。")]
+    b += L2("mem-qa","11.x","读敬拜手册时常有的 7 个疑问",
+      '<p>每个疑问用一两句回答，并指到原文；先读回答，再点链接读条文。</p><div class="qa7">'
+      + "".join(f'<div class="qa reveal"><h5>❓ {q}</h5><p>{a}</p></div>' for q,a in qa) + '</div>')
+    import notes, json as _j
+    def _t(k):
+        d=_j.load(open(f"data/{k}.json",encoding="utf-8"))
+        if k=="hc": return "".join(b["x"] for l in d["lds"] for b in l["blocks"] if b["t"] in("p","h4"))
+        if k=="bc": return "".join(b["x"] for a in d["articles"] for b in a["blocks"] if b["t"] in("p","h4"))
+        return "".join(b["x"] for h in d["heads"] for i in h["items"] for b in i["blocks"] if b["t"] in("p","h4"))
+    docs=[("海德堡",_t("hc")),("比利时",_t("bc")),("多特",_t("dort"))]
+    terms=[("基督","d-chr"),("恩典","d-sal"),("信心","d-sal"),("圣灵","d-sp"),("拣选","d-sal"),("教会","d-ch"),("律法","d-ch"),("安慰","d-sal"),("圣约","d-cov"),("感恩","d-sal")]
+    b += L2("mem-marks","11.x","核心词频与笔记标记速查",
+      '<p>三份文件里反复出现的词，就是它们的重心。下图按 CCI 中文原文逐字计数（构建时统计）：<b class="mk-k d-chr">基督</b>在三份文件里都居首。</p>'
+      + notes.wfreq(docs,terms)
+      + key("读图：海德堡的高频词是<b>安慰</b>与<b>感恩</b>（经验与生活），多特的高频词是<b>拣选</b>与<b>恩典</b>（救恩的源头），比利时信条覆盖最广（教会、律法、圣灵）。")
+      + table(["标记","样式","用于","怎样记"],notes.MARK_TABLE))
+    return L1("memory","十一","记忆与自测","brain","口诀、导图、翻卡、自测与 52 周计划。", b)

@@ -1,0 +1,7 @@
+__pycache__/
+.netlify/
+data/pdf/
+_shots/
+node_modules/
+.env
+*.secret
