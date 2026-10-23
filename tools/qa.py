@@ -10,6 +10,7 @@ JS_OVER='''()=>{
  const sc=(el)=>{for(let p=el;p&&p!==document.body;p=p.parentElement){const o=getComputedStyle(p).overflowX; if((o==='auto'||o==='scroll')&&p.scrollWidth>p.clientWidth) return true;} return false};
  document.querySelectorAll('main *, #toc *').forEach(el=>{
    if(el.closest('svg')&&el.tagName!=='svg') return;
+   if(el.closest('.leaflet-container')) return; // 地图瓦片由容器 overflow:hidden 裁切
    const r=el.getBoundingClientRect(); if(r.width===0||r.height===0) return;
    if(getComputedStyle(el).position==='fixed') return;
    if(r.right>vw+1||r.left<-1){ if(!sc(el)&&!el.closest('#toc')) out.push([el.tagName+'.'+(el.className&&el.className.baseVal===undefined?el.className:''),Math.round(r.left),Math.round(r.right)]); }
