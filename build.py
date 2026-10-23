@@ -6,7 +6,7 @@ import core
 from c_common import *
 import pdf15,storymap
 import c_compare,c_west,c_src,libs
-import p_bible,p_hist,p_bc,p_topics,p_mem
+import v2, p_bible,p_hist,p_bc,p_topics,p_mem
 
 SITE="比利时信条 · 欧陆改革宗深读"
 PAGES=[("index","index.html","首页","home"),("bible","bible.html","一 全本圣经与圣约","book"),("hist","hist.html","二 历史·地理·文化","map"),("bc","bc.html","三 37条逐条深读","scroll"),
@@ -60,7 +60,7 @@ DESC={"index":"比利时信条（1561，德布利）欧陆改革宗中文深读�
 MERMAID='''<script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 mermaid.initialize({startOnLoad:false,securityLevel:"strict",theme:"base",flowchart:{htmlLabels:true,curve:"basis",useMaxWidth:true},themeVariables:{fontFamily:"PingFang SC, Noto Sans SC, Microsoft YaHei, sans-serif",fontSize:"14px",primaryColor:"#24345f",primaryTextColor:"#ffffff",primaryBorderColor:"#d4af37",lineColor:"#d4af37",secondaryColor:"#2c2550",tertiaryColor:"#16203f",clusterBkg:"#16203f",clusterBorder:"#5aa9e6",titleColor:"#f3d98b",edgeLabelBackground:"#0d1838",textColor:"#e8ecf6",nodeTextColor:"#ffffff"}});
 const els=[...document.querySelectorAll("pre.mermaid")];const run=async(el)=>{if(el.dataset.processed)return;try{await mermaid.run({nodes:[el]})}catch(e){el.insertAdjacentHTML("afterend","<p class=mermaid-err>流程图未能渲染，上方为文字版。</p>")}};
-if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);run(e.target)}}),{rootMargin:"400px"});els.forEach(e=>io.observe(e))}else els.forEach(run);</script>'''
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);(e.target.matches("pre.mermaid")?[e.target]:[...e.target.querySelectorAll("pre.mermaid")]).forEach(run)}}),{rootMargin:"1500px"});new Set(els.map(e=>e.closest("section.l2")||e)).forEach(t=>io.observe(t))}else els.forEach(run);</script>'''
 def extra_js(cur,body):
     o=""
     if 'id="lmap"' in body: o+='<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>'
@@ -115,8 +115,10 @@ for k,f,_,_ in PAGES:
     out=t87.post(out,fold=k in {"hct","bct","dtt","creedsx"})
     out,_ny=t87.extras(out,k,"tfu")
     out=re.sub(r'(<pre class="mermaid">)(.*?)(</pre>)',lambda m:m.group(1)+re.sub(r'<(?!br/?>)[^>]+>','',m.group(2))+m.group(3),out,flags=re.S)
+    out=v2.post(out,k)
     open(f,"w",encoding="utf-8").write(out)
 trim.check()
+print('bundle',v2.bundle())
 print("marks",{k:v for k,v in MKS.items() if v}); print("trim chars",CUT,sum(CUT.values()))
 own.check()
 if UNRES: print("WARN unresolved links:",sorted(set(UNRES))[:40],len(UNRES))

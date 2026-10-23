@@ -1,5 +1,5 @@
 /* t87：主题切换 + 背诵版全部展开/收起 */
-(function(){var d=document,de=d.documentElement,K='ui.theme',C={night:'#070d22',dawn:'#f7f1e6',jade:'#031c1b',grape:'#150b26'};
+(function(){var d=document,de=d.documentElement,K='ui.theme',C={night:'#070d22',dawn:'#f7f1e6',jade:'#03201e',ocean:'#04182b',grape:'#140a26',parch:'#f3e9d2'};
 var box=d.getElementById('thm'),btn=d.getElementById('thmb');
 function cur(){return de.getAttribute('data-theme')||'night'}
 function mark(){[].forEach.call(d.querySelectorAll('[data-theme-set]'),function(b){b.setAttribute('aria-checked',b.getAttribute('data-theme-set')===cur())})}

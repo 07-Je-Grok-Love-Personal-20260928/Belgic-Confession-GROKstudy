@@ -101,9 +101,9 @@ def _fold(h):
 BAR = ('<div class="rxbar" role="group" aria-label="背诵版折叠"><b>🎙️ 干净背诵版</b><span>经文参考、原文链接与学习提示默认折叠，需要时点开。</span>'
        '<button class="btn" type="button" data-rx="open">📖 展开全部</button><button class="btn ghost" type="button" data-rx="close">🙈 全部收起</button>'
        '<span class="qaleg"><i class="qb">Q</i>问 <i class="ab">A</i>答</span></div>')
-THEMES = [("night", "🌌", "深夜星空", "#070d22"), ("dawn", "🌅", "晨光暖白", "#f7f1e6"), ("jade", "🏞️", "青绿山水", "#031c1b"), ("grape", "🍇", "葡萄紫韵", "#150b26")]
-INIT = ('<script>try{var T=localStorage.getItem("ui.theme");if(T&&/^(night|dawn|jade|grape)$/.test(T)){document.documentElement.setAttribute("data-theme",T);'
-        'var M={night:"#070d22",dawn:"#f7f1e6",jade:"#031c1b",grape:"#150b26"};document.querySelector(\'meta[name="theme-color"]\').setAttribute("content",M[T])}}catch(e){}</script>')
+THEMES = [("night", "🌌", "夜空", "#070d22"), ("dawn", "🌅", "晨曦", "#f7f1e6"), ("jade", "🌲", "森林", "#03201e"), ("ocean", "🌊", "海洋", "#04182b"), ("grape", "🍇", "葡萄", "#140a26"), ("parch", "📜", "羊皮纸", "#f3e9d2")]
+INIT = ('<script>try{var T=localStorage.getItem("ui.theme");if(T&&/^(night|dawn|jade|ocean|grape|parch)$/.test(T)){document.documentElement.setAttribute("data-theme",T);'
+        'var M={night:"#070d22",dawn:"#f7f1e6",jade:"#03201e",ocean:"#04182b",grape:"#140a26",parch:"#f3e9d2"};document.querySelector(\'meta[name="theme-color"]\').setAttribute("content",M[T])}}catch(e){}</script>')
 THBAR = ('<div class="thbar" role="group" aria-label="主题配色"><span>🎨 主题</span>' + "".join(
     f'<button type="button" role="menuitemradio" data-theme-set="{k}" style="--sw:{c}" title="{n}"><i></i>{e}<b>{n}</b></button>' for k, e, n, c in THEMES) + '</div>')
 def switcher():
@@ -214,6 +214,6 @@ def extras(h, page, site):
         h, n = mark_years(h)
         h = h.replace('<span class="lg lg-def">定义框</span>', '<span class="mk-d">1563 年</span><span class="lg lg-def">定义框</span>', 1)
         if 'class="core1"' in h:
-            h = h.replace('<span class="mk-k d-chr">关键术语</span>', '<span class="mk-core">一句话核心</span><span class="mk-k d-chr">关键术语</span>', 1)
+            h = h.replace('<span class="lgi"><b class="mk-k d-chr">称义</b>', '<span class="lgi"><span class="mk-core">一句话核心</span><small>每节核心</small></span><span class="lgi"><b class="mk-k d-chr">称义</b>', 1)
             h = h.replace('data-mktog aria-pressed="true">标记：开</button>', 'data-mktog aria-pressed="true">标记：开</button><button type="button" class="btn ghost mktog" data-coreonly aria-pressed="false">只看核心：关</button>', 1)
     return h, n

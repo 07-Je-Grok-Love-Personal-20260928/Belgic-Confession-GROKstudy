@@ -72,9 +72,9 @@ def _segs(t, st):
     return segs
 
 def _mark_plain(seg, st):
-    s = NEG.sub(lambda m: (st.__setitem__("nneg", st["nneg"]+1) or f'<span class="mk-x">{m.group(1)}</span>{m.group(2)}<span class="mk-u">{m.group(3)}</span>'), seg) if st["neg"] else seg
+    s = NEG.sub(lambda m: (st.__setitem__("nneg", st["nneg"]+1) or f'<span class="mk-w">{m.group(1)}</span>{m.group(2)}<span class="mk-u">{m.group(3)}</span>'), seg) if st["neg"] else seg
     if st["neg"]:
-        s = NEG2.sub(lambda m: (st.__setitem__("nneg", st["nneg"]+1) or f'<span class="mk-u">{m.group(1)}</span>{m.group(2)}<span class="mk-x">{m.group(3)}</span>') if 'mk-' not in m.group(0) else m.group(0), s)
+        s = NEG2.sub(lambda m: (st.__setitem__("nneg", st["nneg"]+1) or f'<span class="mk-u">{m.group(1)}</span>{m.group(2)}<span class="mk-w">{m.group(3)}</span>') if 'mk-' not in m.group(0) else m.group(0), s)
     res = []
     for p in re.split(r'(<[^>]+>)', s):
         if p.startswith("<"): res.append(p); continue
@@ -90,7 +90,7 @@ def _mark_plain(seg, st):
             w = m.group(0)
             if ("h:" + w) in st["seen"]: return w
             st["seen"].add("h:" + w); st["nx"] += 1
-            return f'<span class="mk-x">{w}</span>'
+            return f'<span class="mk-w">{w}</span>'
         sub = re.split(r'(<span class="mk-ref">[^<]*</span>)', p)
         res.append("".join(x if x.startswith("<") else HER_RE.sub(her, TERM_RE.sub(term, x)) for x in sub))
     return "".join(res)
@@ -138,10 +138,17 @@ def defs(h, n=6):
     items = "".join(f'<div class="mkdef {TERM[w]}"><dt>{w}</dt><dd>{DEF[w]}</dd></div>' for _, w in cnt)
     return f'<details class="mkdefs" open><summary>📘 本页关键词定义 <small>本站用语 · 按本页出现次数排序</small></summary><dl class="mkdl">{items}</dl></details>'
 
-LEGEND = ('<div class="mklegend" role="note" aria-label="笔记标记图例"><b class="mkl-t">🖍 标记图例</b>'
- '<span class="mk-k d-chr">关键术语</span><span class="mk-hl">必背</span><span class="mk-u">重点（正面陈述）</span>'
- '<span class="mk-x">难点·易错·异端</span><span class="mk-ref">罗3:24</span><span class="lg lg-def">定义框</span><span class="lg lg-app">应用侧栏</span><span class="lg lg-peg"><i>1</i>记忆钉</span>'
+LEGEND = ('<div class="mklegend" role="note" aria-label="笔记标记图例"><b class="mkl-t">🖍 笔记标记</b>'
+ '<span class="lgi"><b class="mk-k d-chr">称义</b><small>术语·领域色</small></span>'
+ '<span class="lgi"><span class="mk-hl">核心句</span><small>必背·荧光</small></span>'
+ '<span class="lgi"><span class="mk-u">而是……</span><small>重点·金实线</small></span>'
+ '<span class="lgi"><span class="mk-x">难在此</span><small>难点·红波浪</small></span>'
+ '<span class="lgi"><span class="mk-w">不是……</span><small>误读·橙双线</small></span>'
+ '<span class="lgi"><span class="mk-ref">罗3:24</span><small>经文·蓝虚线</small></span>'
+ '<span class="lgi"><span class="mk-d">1561</span><small>年代·青点线</small></span>'
+ '<span class="lgi"><span class="mk-a">今天这样活</span><small>应用·绿底</small></span>'
  '<span class="lgc"><i class="d-god">神/父</i><i class="d-chr">基督</i><i class="d-sp">圣灵</i><i class="d-sal">救恩</i><i class="d-cov">圣约</i><i class="d-ch">教会</i></span>'
+ '<span class="lgbox"><i class="bk">🔑 重点框</i><i class="bh">⚠️ 难点框</i><i class="bw">🚫 误读框</i><i class="ba">🌱 应用框</i><i class="bm">🧠 记忆框</i></span>'
  '<button type="button" class="btn ghost mktog" data-mktog aria-pressed="true">标记：开</button></div>')
 
 QTITLE = {"own": "本站用语，不是引文", "tr": "本站译文或其他中文译本的措辞，不是 CCI 逐字原文"}
@@ -196,12 +203,12 @@ def wfreq(docs, terms):
     return f'<div class="wfreq reveal">{key}{rows}</div>'
 
 MARK_TABLE = [
- ["<b class=\"mk-k d-sal\">称义</b>", "加粗 + 领域色", "关键术语（每节首次出现）", "颜色＝教义领域：蓝神/父 · 金基督 · 绿圣灵 · 珊瑚救恩 · 紫圣约 · 青教会"],
- ["<span class=\"mk-hl\">核心一句</span>", "荧光底", "必背句（🎯 核心一句）", "先背荧光句，再看其余"],
+ ["<b class=\"mk-k d-sal\">称义</b>", "加粗 + 领域色", "关键术语（每节首次出现）", "颜色＝教义领域：神/父 · 基督 · 圣灵 · 救恩 · 圣约 · 教会"],
+ ["<span class=\"mk-hl\">核心一句</span>", "荧光底", "必背句（核心一句、重点框首句、记忆钩）", "先背荧光句，再看其余"],
  ["<span class=\"mk-u\">而是……</span>", "金色实线", "正面陈述、重点", "实线＝要记住的“是什么”"],
- ["<span class=\"mk-x\">不是……</span>", "红色波浪线", "否定、难点、易错、异端", "波浪＝要避开的“不是什么”"],
- ["<span class=\"mk-ref\">罗3:24</span>", "琥珀色底", "经文出处", "看到琥珀色就去翻圣经"],
- ["定义框", "蓝色方框", "本页关键词定义（本站用语）", "页首先读定义，再读正文"],
- ["应用侧栏", "绿色左边条", "应用、操练", "绿条＝今天怎么活"],
- ["① ② ③", "金色圆号", "记忆钉（记忆钩、关键词）", "按序号回忆，一钉一词"],
+ ["<span class=\"mk-x\">难在此</span>", "红色波浪线", "难点（难点框首句与加粗）", "波浪＝要慢下来想的地方"],
+ ["<span class=\"mk-w\">不是……</span>", "橙色双下划线", "误读、易错、异端名", "双线＝要避开的“不是什么”"],
+ ["<span class=\"mk-ref\">罗3:24</span>", "蓝色虚线", "经文出处", "看到蓝虚线就去翻圣经"],
+ ["<span class=\"mk-d\">1561</span>", "青色点线", "年代、数字", "把事件挂在时间轴上"],
+ ["<span class=\"mk-a\">今天这样活</span>", "绿色底", "应用（应用框首句）", "绿色＝今天怎么活"],
 ]

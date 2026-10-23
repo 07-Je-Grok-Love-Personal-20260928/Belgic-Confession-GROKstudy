@@ -3,7 +3,7 @@
 
 from extra import *
 import html as H
-V = "v20261023-1"
+V = "v20261023-2"
 CUR = {"f": None, "n": 0, "c2": 0}
 PEND = []
 PEND3 = []
@@ -13,7 +13,10 @@ def L1(id, num, title, ico, lead, body):
     TOC.append((id, f"{num}、{title}", PEND[:], CUR["f"])); PEND.clear()
     return f'<section class="l1" id="{id}"><header class="l1h reveal"><span class="ico">{ic(ico,"ic big")}</span><div><div class="kick">第{num}部分</div><h2>{num}、{title}</h2><p class="lead">{lead}</p></div></header>{body}</section>'
 SEC = set(['bi-refx', 'rx-bible', 'hcd-ppl', 'hcd-use', 'rx-hc', 'bcd-ppl', 'bcd-use', 'bcd-feat', 'rx-bc', 'dd-co', 'dd-miss', 'dd-ppl', 'dd-use', 'rx-dort', 'cp-use', 'rx-compare', 'cp-ref', 'wm-inst', 'wm-time', 'wm-sab', 'rx-west', 'mem-rf', 'rx-memory', 'src-cci', 'src-refx', 'src-ver', 'src-method'])
+DROP = set(["bcd-deep","bcd-ppl","rx-bc","rx-compare","rx-west","rx-creedsx","cr-sm","mem-one","src-cci","src-pdf","src-refx","wm-inst","wm-time"])  # v2：删去重复与枝节
 def L2(id, num, title, body):
+    if id in DROP:
+        PEND3.clear(); return ""
     if id.endswith("-whole") or id == "hcd-angles":
         num = f'{CUR["n"]}.0'  # v6：导读区块不占用既有编号，保持全站既有“见 x.y”引用不变
     else:
@@ -32,10 +35,22 @@ def L3(id, title, body, icon="cross", tag="", cls="", sub="", bar=None):
     t = f'<span class="l3t">{tag}</span>' if tag else ""
     s = f'<small class="l3s">{sub}</small>' if sub else ""
     return f'<section class="l3 reveal {cls}" id="{id}"><h4 class="l3h"><span class="n3">{num}</span>{ic(icon,"ic sm")}<span class="l3x">{title}</span>{s}{t}</h4>{body}</section>'
-def key(t): return f'<div class="call key"><b>🔑 重点</b>{t}</div>'
-def hard(t): return f'<div class="call hard"><b>⚠️ 难点</b>{t}</div>'
+import re as _re
+def _first(t, cls):
+    """v2：给提示框的第一句加语义标记（只在标签平衡、无块级元素时）。"""
+    m = _re.search(r'[。！？]', t)
+    if not m or 'mk-' in t[:m.end()]: return t
+    a = t[:m.end()]; z = t[m.end():]
+    if _re.search(r'<(ul|ol|li|p|div|table|details|br)\b', a): return t
+    if len(_re.findall(r'<[a-zA-Z]', a)) != len(_re.findall(r'</', a)): return t
+    if len(_re.sub(r'<[^>]+>', '', a)) > 90: return t
+    return f'<span class="{cls}">{a}</span>{z}'
+def key(t): return f'<div class="call key"><b>🔑 重点</b>{_first(t,"mk-hl")}</div>'
+def hard(t): return f'<div class="call hard"><b>⚠️ 难点</b>{_first(t,"mk-x")}</div>'
 def note(t): return f'<div class="call note"><b>📌 说明</b>{t}</div>'
-def app(t): return f'<div class="call app"><b>🌱 应用</b>{t}</div>'
+def app(t): return f'<div class="call app"><b>🌱 应用</b>{_first(t,"mk-a")}</div>'
+def warn(t): return f'<div class="call warn"><b>🚫 易错·误读</b>{t}</div>'
+def mem(t): return f'<div class="call mem"><b>🧠 记忆</b>{t}</div>'
 def cards(items, cls="g3"):
     return f'<div class="grid {cls}">' + "".join(f'<div class="card" style="--c:{c}"><div class="ct"><span>{i}</span>{t}</div><p>{p}</p></div>' for i,t,p,c in items) + '</div>'
 def table(head, rows, cls=""):
