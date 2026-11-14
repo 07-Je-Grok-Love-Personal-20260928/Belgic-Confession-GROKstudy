@@ -181,6 +181,10 @@ document.querySelectorAll('[data-sline]').forEach(function(box){var st=[].slice.
 (function(){var de=document.documentElement,K='mk.off';function paint(){var off=de.classList.contains('mkoff');document.querySelectorAll('[data-mktog]').forEach(function(b){b.setAttribute('aria-pressed',String(!off));b.textContent=off?'标记：关':'标记：开'})}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-mktog]');if(!b)return;de.classList.toggle('mkoff');try{localStorage.setItem(K,de.classList.contains('mkoff')?'1':'0')}catch(x){}paint()});paint()})();
 
+/* v4：重点标记悬停/长按提示其含义（与图例一致），首次悬停时才设置，零开销 */
+(function(){var M={'mk-hl':'必背·荧光（核心句）','mk-core':'必背·荧光（核心句）','mk-u':'重点·金实线','mk-x':'难点·红波浪','mk-w':'误读·橙双线','mk-d':'年代·青点线','mk-a':'应用·绿底','mk-k':'术语·领域色','mk-ref':'经文·蓝虚线'};
+document.addEventListener('pointerover',function(e){var t=e.target;if(!t.classList||t.title)return;for(var k in M){if(t.classList.contains(k)){t.title=M[k];break}}},{passive:true})})();
+
 ;/* t87：主题切换 + 背诵版全部展开/收起 */
 (function(){var d=document,de=d.documentElement,K='ui.theme',C={night:'#070d22',dawn:'#f7f1e6',jade:'#03201e',ocean:'#04182b',grape:'#140a26',parch:'#f3e9d2'};
 var box=d.getElementById('thm'),btn=d.getElementById('thmb');

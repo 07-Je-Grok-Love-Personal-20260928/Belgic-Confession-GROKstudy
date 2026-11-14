@@ -91,3 +91,40 @@ html.thx #toc.toc4{transition:none}
 /* v4：锚点跳转时强制渲染目标及其祖先，避免按估计高度落偏 */
 .cv-on{content-visibility:visible!important}
 .cv-on.reveal,.cv-on .reveal{transform:none!important;opacity:1!important;transition:none!important}
+
+/* v4 调色：13 个部分各有色相，目录一级徽章与页面标题同色，一眼认出“我在哪一部分” */
+.tk-l1>li:nth-child(1){--ph:45}
+.tk-l1>li:nth-child(2){--ph:205}
+.tk-l1>li:nth-child(3){--ph:150}
+.tk-l1>li:nth-child(4){--ph:265}
+.tk-l1>li:nth-child(5){--ph:15}
+.tk-l1>li:nth-child(6){--ph:180}
+.tk-l1>li:nth-child(7){--ph:330}
+.tk-l1>li:nth-child(8){--ph:95}
+.tk-l1>li:nth-child(9){--ph:230}
+.tk-l1>li:nth-child(10){--ph:0}
+.tk-l1>li:nth-child(11){--ph:285}
+.tk-l1>li:nth-child(12){--ph:120}
+.tk-l1>li:nth-child(13){--ph:30}
+body[data-page=bible]{--ph:45}
+body[data-page=hist]{--ph:205}
+body[data-page=atlas]{--ph:150}
+body[data-page=bc]{--ph:265}
+body[data-page=topics]{--ph:15}
+body[data-page=compare]{--ph:180}
+body[data-page=westminster]{--ph:330}
+body[data-page=bct]{--ph:95}
+body[data-page=hct]{--ph:230}
+body[data-page=dtt]{--ph:0}
+body[data-page=creedsx]{--ph:285}
+body[data-page=memory]{--ph:120}
+body[data-page=sources]{--ph:30}
+.tk1>.tk-row>a .tk-n{background:linear-gradient(135deg,hsl(var(--ph,45) 62% 40%),hsl(calc(var(--ph,45) + 28) 62% 32%));color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.35);box-shadow:0 2px 8px hsl(var(--ph,45) 60% 30% / .35)}
+.tk1.is-cur>.tk-row>a .tk-n{box-shadow:0 0 0 2px hsl(var(--ph,45) 70% 60% / .7),0 2px 10px hsl(var(--ph,45) 60% 30% / .45)}
+body[data-page] main h1{background-image:linear-gradient(90deg,hsl(var(--ph,45) 70% 55%),hsl(calc(var(--ph,45) + 40) 70% 55%) 40%,transparent 70%);background-size:100% 3px;background-repeat:no-repeat;background-position:0 100%;padding-bottom:.25em}
+/* v4 重点标记：荧光笔“划过”动画（随区块进入视口；减少动态时直接显示） */
+@media (prefers-reduced-motion:no-preference){
+ html.js .reveal:not(.in) .mk-hl,html.js .reveal:not(.in) .mk-core{background-size:0% 100%!important}
+ html.js .mk-hl,html.js .mk-core{background-repeat:no-repeat;transition:background-size .9s cubic-bezier(.2,.8,.2,1) .15s}
+}
+html.mkoff .mk-hl,html.mkoff .mk-core{transition:none}
