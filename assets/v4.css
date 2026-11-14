@@ -139,3 +139,6 @@ html:is([data-theme=dawn],[data-theme=parch]) #toc .tk-row>a.on .tk-t,html:is([d
 .grid.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
 .grid.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
 .hero h1 span{display:block;letter-spacing:.1em;text-wrap:balance;margin-top:.35em;line-height:1.35}
+/* v4 polish: icon-memory tiles — 2 roomy columns on phones, icon above text on narrow tiles */
+.icm-g{grid-template-columns:repeat(auto-fill,minmax(min(100%,138px),1fr))}
+@media (max-width:520px){.icm-g{grid-template-columns:repeat(2,minmax(0,1fr))}.icm-t small{font-size:.86rem}}
