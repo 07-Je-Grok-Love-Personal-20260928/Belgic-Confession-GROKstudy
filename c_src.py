@@ -56,7 +56,7 @@ def part_src(bodies):
       ("urcna.org（北美联合改革宗）","Ecumenical Creeds 与信经页（英文）：脚注把“降在阴间”“大公”连到信条","https://www.urcna.org/creeds"),
       ("heritagereformed.com","Doctrinal Standards 页（英文）：三大古代信经、三项联合信条，并采纳威斯敏斯特标准","https://heritagereformed.com/about-the-hrc/doctrinal-standards-and-worship/"),
       ("prca.org（美国抗议宗改革宗）","<b>仅取自搜索结果摘录</b>（网站被验证页拦截，本站未能直接读取）：采纳三份信经，另加迦克墩信经","https://www.prca.org/about/official-standards/creeds"),
-      ("opc.org（正统长老会）","WCF、WLC、WSC 英文原文页：本次完整读取，用于第六部分的短语对照","https://opc.org/standards.html"),
+      ("opc.org（正统长老会）","WCF、WLC、WSC 英文原文页：本次完整读取，用于第七部分的短语对照","https://opc.org/standards.html"),
       ("canadianreformedseminary.ca","神学院使命介绍页（英文），仅作背景","https://canadianreformedseminary.ca/about/discover-crts/"),
       ("wts.edu（威斯敏斯特神学院）","使命与价值观页（英文），仅作背景","https://www.wts.edu/about/mission-values"),
       ("crts.edu（改革宗神学院，台北）","学院介绍页，仅作背景","https://crts.edu/en/intro/")]

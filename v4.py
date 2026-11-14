@@ -22,6 +22,7 @@ def remap_refs(h):
         out = "".join(x if x in "、至" else i2cn(bump(cn2i(x))) for x in nums)
         return m.group(1) + m.group(2) + out + m.group(4)
     h = re.sub(r'(本站|见|姊妹站与本站|与本站)(第)([一二三四五六七八九十、至]+)(部分)', part, h)
+    h = re.sub(r'(">)(第)([一二三四五六七八九十、至]+)(部分</a>)', part, h)
     def dot(m):
         s = f'{m.group(1)}{m.group(2)}{bump(int(m.group(3)))}.{m.group(4)}'
         if m.group(5): s += f'{m.group(5)}{bump(int(m.group(6)))}.{m.group(7)}'

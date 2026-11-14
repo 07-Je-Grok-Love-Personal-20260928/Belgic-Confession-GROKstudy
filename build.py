@@ -69,7 +69,7 @@ def page(cur,body):
 def index_body():
     hc=J("hc"); nq=sum(1 for l in hc["lds"] for b in l["blocks"] if b["t"]=="h4")
     bcn=len(J("bc")["articles"]); dn=sum(len(h["items"]) for h in J("dort")["heads"])
-    desc={"bible":"四幕救恩史 · 九个约 · 八条圣经神学主线 · 五个唯独 · 流程图","hist":"德布利的故事 · 时间线 · 交互地图 · 文化区域 · 版画图像 · 狱中书信","atlas":"七张成对地图：离线示意图 + 多源实时底图",
+    desc={"bible":"四幕救恩史 · 九个约 · 八条圣经神学主线 · 五个唯独 · 流程图","hist":"德布利的故事 · 时间线 · 交互地图 · 文化区域 · 版画图像 · 狱中书信","atlas":"十张成对地图：离线示意图 + 多源实时底图",
       "bc":"37 条 × 六个面向：为何写 · 说什么 · 圣经神学 · 圣约 · 对手 · 联系；重点/难点/应用/记忆钩","topics":"三条战线 · 与法国信条比较 · 八个难点 · 安慰线 · 误解 · 数据图",
       "compare":"为什么是三份而不是一份：体裁、问题、对照矩阵、签署书","westminster":"WCF/WLC/WSC 十五个主题的对读","bct":"37 条逐字全文（CCI）· 背诵模式 · 朗读","hct":"129 问逐字全文（CCI）· 背诵模式","dtt":"63 个条目逐字全文（CCI）· 背诵模式",
       "creedsx":"使徒 · 尼西亚 · 亚他那修（CCI）背诵版","memory":"七群口诀 · 37 个钩子 · 填空 · 翻卡 · 25 题自测 · 37 天计划","sources":"CCI 逐字 · PDF 手册 · 参考站 · 图片版权"}
@@ -82,7 +82,7 @@ def index_body():
     prog='''<section class="l1" id="path"><header class="l1h reveal"><span class="ico">'''+ic("map","ic big")+'''</span><div><div class="kick">学习路径</div><h2>学习路径与进度</h2><p class="lead">建议顺序：整体（圣经与圣约）→ 处境（历史地理与地图集）→ 局部（逐条）→ 专题 → 比较 → 原文背诵 → 自测。进度只保存在你的浏览器里（localStorage），不上传。</p></div></header>
 <div class="progbox reveal"><div class="ring2" id="ringbox"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="rb"/><circle cx="60" cy="60" r="52" class="rf" id="ringf" pathLength="100" stroke-dasharray="0 100"/></svg><div class="rt"><b id="ringn">0%</b><small>已读小节</small></div></div><div class="pinfo"><p>已读 <b id="readn">0</b> / <b id="readt">0</b> 个小节（滚动到小节即记为已读）。自测最近得分：<b id="quizs">未做</b>。</p><p><button class="btn ghost" id="resetp" type="button">清除进度</button></p></div></div>
 <div class="steps">'''+steps+'''</div></section>'''
-    vis=[("🌍","交互地图集","七张成对地图：离线示意图 + 可切换的多源实时底图。","atlas.html"),("🧭","时间线与故事线","1517–今天；动画时间轴与故事步骤。","hist.html#hs-tl"),("🏰","城墙动画","1561 年图尔奈城堡：信条越过城墙。","hist.html#hs-wall"),
+    vis=[("🌍","交互地图集","十张成对地图：离线示意图 + 可切换的多源实时底图。","atlas.html"),("🧭","时间线与故事线","1517–今天；动画时间轴与故事步骤。","hist.html#hs-tl"),("🏰","城墙动画","1561 年图尔奈城堡：信条越过城墙。","hist.html#hs-wall"),
          ("🔀","流程图（Mermaid）","圣约之线、37 条的内在逻辑、七群流程。","bible.html#bb-cov"),("🧩","37 条地图","七群着色方块，点击跳到逐条深读。","bc.html#bx-map"),("🎴","六面卡","每条：为何写·说什么·圣经神学·圣约·对手·联系。","bc.html#bx-1"),
          ("🔊","朗读（TTS）","逐条原文可用浏览器中文语音朗读。","bc.html#bx-1"),("⚔️","三条战线","罗马 · 重洗派 · 路德宗：BC 在跟谁说话。","topics.html#tp-fronts"),("📋","三项联合信条对照","为什么是三份而不是一份。","compare.html"),
          ("✍️","填空 · 翻卡 · 自测","15 句 CCI 金句填空，25 题自测。","memory.html#mem-cloze"),("🔤","背诵版","BC/HC/Dort/三信经原文背诵模式。","bct.html"),("↔️","可拖宽的目录","拖目录右缘金色手柄调宽；可收起。","index.html#idx-vis")]

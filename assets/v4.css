@@ -84,3 +84,6 @@ html.thx #toc.toc4{transition:none}
 .tk1>.tk-row>a .tk-n{display:inline-flex;align-items:center;justify-content:center;min-width:1.7em;height:1.5em;padding:0 .35em;border-radius:7px;background:rgba(var(--A),.18);color:var(--gtx,var(--gold2));font-size:.85em;line-height:1}
 .tk1.is-cur>.tk-row>a .tk-n{background:var(--tk1);color:#0a1230}
 .mklegend .lgbox i.bk{height:auto;overflow:visible;border-radius:8px;background:color-mix(in srgb,var(--cc) 14%,transparent)}
+/* v4：示意图不再挤成半栏——1600px 以下上下排，示意图文字保持可读 */
+@media(max-width:1599.98px){.mapduo:not(.wide){grid-template-columns:minmax(0,1fr)}}
+.sche svg{max-width:1100px;margin:0 auto}
