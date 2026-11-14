@@ -20,9 +20,10 @@ function loadLib(cb){
   if(window.L){st.ready=2;return cb()}
   if(st.ready===1){st.q.push(cb);return}
   st.ready=1;st.q.push(cb);
-  var l=document.createElement('link');l.rel='stylesheet';l.href='assets/leaflet/leaflet.css';document.head.appendChild(l);
+  var l=document.createElement('link'),cssOk=0,jsOk=0;l.rel='stylesheet';l.href='assets/leaflet/leaflet.css';l.onload=l.onerror=function(){cssOk=1;go()};document.head.appendChild(l);
+  function go(){if(!cssOk||!jsOk)return;st.ready=2;st.q.forEach(function(f){try{f()}catch(e){}});st.q=[]}
   var s=document.createElement('script');s.src='assets/leaflet/leaflet.js';s.async=true;
-  s.onload=function(){st.ready=2;st.q.forEach(function(f){try{f()}catch(e){}});st.q=[]};
+  s.onload=function(){jsOk=1;go()};
   s.onerror=function(){st.ready=0;st.q.forEach(function(f){try{f()}catch(e){}});st.q=[]};
   document.head.appendChild(s);
 }

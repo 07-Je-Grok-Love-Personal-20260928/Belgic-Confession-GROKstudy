@@ -73,8 +73,8 @@ def toc_html(TOC, FILE, cur, emo):
 
 HEAD_INIT = ('<script>try{var de=document.documentElement,w=innerWidth,s=de.style,ls=localStorage;'
              'var a=+ls.getItem("tk4.w"),m=+ls.getItem("tk4.wm");'
-             'if(a>=240&&a<=Math.max(240,Math.min(760,w-420)))s.setProperty("--tkw",a+"px");'
-             'if(m>=260&&m<=w-12)s.setProperty("--tkwm",m+"px");'
+             'if(a>=240&&a<=760)s.setProperty("--tkw",a+"px");'
+             'if(m>=260&&m<=2000)s.setProperty("--tkwm",m+"px");'
              'if(ls.getItem("tk4.hide")==="1")de.classList.add("tk-hide")}catch(e){}</script>')
 
 def shift_headings(h, index=False):

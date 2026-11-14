@@ -45,7 +45,7 @@ grip.addEventListener('dblclick',reset);
 grip.addEventListener('keydown',function(e){var st=e.shiftKey?64:16,v=curW(),l=lim();
   if(e.key==='ArrowLeft')v-=st;else if(e.key==='ArrowRight')v+=st;else if(e.key==='Home')v=l[0];else if(e.key==='End')v=l[1];else if(e.key==='Enter'){reset();return}else return;e.preventDefault();apply(v,true)});
 var rt=0;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){var v=curW(),c=clamp(v);if(c!==v)apply(c,false);else aria(v)},120)},{passive:true});
-aria(curW());
+(function(){var k=wide()?KW:KM,sw=+ld(k);if(sw){var c=clamp(sw);de.style.setProperty(wide()?'--tkw':'--tkwm',c+'px')}aria(curW())})();
 /* ---------- 搜索过滤 ---------- */
 var all=$$('.tk-i',nav).map(function(li){var t=li.firstChild.textContent;return {li:li,t:t.toLowerCase().replace(/\s+/g,'')}});
 var qt=0;if(q)q.addEventListener('input',function(){clearTimeout(qt);qt=setTimeout(filter,90)});
@@ -98,7 +98,9 @@ var cur=null,band=new Set(),order=new Map();secs.forEach(function(x,i){order.set
 function live(x){return !x.checkVisibility||x.checkVisibility({contentVisibilityAuto:true})}
 function setAct(id){if(id===cur)return;if(window.TK)TK.act(id);cur=id}
 if('IntersectionObserver'in window){
- var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});var best=null,bi=-1;var lim=Math.max(88,innerHeight*.14);band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)&&x.getBoundingClientRect().top<=lim){bi=i;best=x}});if(!best)band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)){bi=i;best=x}});if(best)setAct(best.id)},{rootMargin:'0px 0px -75% 0px'});
+ var rtry=0,rt=0;function pick(){var best=null,bi=-1;var lim=Math.max(88,innerHeight*.14);band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)&&x.getBoundingClientRect().top<=lim){bi=i;best=x}});if(!best)band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)){bi=i;best=x}});if(best){rtry=0;setAct(best.id)}else if(band.size&&rtry<8){rtry++;clearTimeout(rt);rt=setTimeout(pick,90)}}
+ var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});rtry=0;pick()},{rootMargin:'0px 0px -75% 0px'});
+ addEventListener('scrollend',function(){rtry=0;pick()},{passive:true});
  var ioR=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){markRead(e.target.id);ioR.unobserve(e.target)}})},{rootMargin:'0px 0px -40% 0px'});
  secs.forEach(function(x){ioA.observe(x);if(x.classList.contains('l2'))ioR.observe(x)})}
 var p=$('#prog'),H=0,de=d.documentElement;function measure(){H=Math.max(1,de.scrollHeight-innerHeight)}measure();
@@ -267,9 +269,10 @@ function loadLib(cb){
   if(window.L){st.ready=2;return cb()}
   if(st.ready===1){st.q.push(cb);return}
   st.ready=1;st.q.push(cb);
-  var l=document.createElement('link');l.rel='stylesheet';l.href='assets/leaflet/leaflet.css';document.head.appendChild(l);
+  var l=document.createElement('link'),cssOk=0,jsOk=0;l.rel='stylesheet';l.href='assets/leaflet/leaflet.css';l.onload=l.onerror=function(){cssOk=1;go()};document.head.appendChild(l);
+  function go(){if(!cssOk||!jsOk)return;st.ready=2;st.q.forEach(function(f){try{f()}catch(e){}});st.q=[]}
   var s=document.createElement('script');s.src='assets/leaflet/leaflet.js';s.async=true;
-  s.onload=function(){st.ready=2;st.q.forEach(function(f){try{f()}catch(e){}});st.q=[]};
+  s.onload=function(){jsOk=1;go()};
   s.onerror=function(){st.ready=0;st.q.forEach(function(f){try{f()}catch(e){}});st.q=[]};
   document.head.appendChild(s);
 }

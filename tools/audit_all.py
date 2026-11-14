@@ -12,7 +12,7 @@ except Exception as e: print('no crawl corpus',e)
 corp=norm(re.sub(r'⟦\d+⟧','',corp))
 PDFC=norm(''.join(json.load(open('data/pdf/pdf2015.json',encoding='utf-8'))['pages'].values()))
 pdfq=0
-files=sys.argv[1:] or ['index.html','bible.html','hc.html','bc.html','dort.html','compare.html','westminster.html','memory.html','sources.html']
+files=sys.argv[1:] or [f for f in sorted(glob.glob('*.html')) if f not in ('bct.html','hct.html','dtt.html','creedsx.html')]
 bad=0
 for f in files:
     t=open(f,encoding='utf-8').read()

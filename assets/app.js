@@ -18,7 +18,9 @@ var cur=null,band=new Set(),order=new Map();secs.forEach(function(x,i){order.set
 function live(x){return !x.checkVisibility||x.checkVisibility({contentVisibilityAuto:true})}
 function setAct(id){if(id===cur)return;if(window.TK)TK.act(id);cur=id}
 if('IntersectionObserver'in window){
- var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});var best=null,bi=-1;var lim=Math.max(88,innerHeight*.14);band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)&&x.getBoundingClientRect().top<=lim){bi=i;best=x}});if(!best)band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)){bi=i;best=x}});if(best)setAct(best.id)},{rootMargin:'0px 0px -75% 0px'});
+ var rtry=0,rt=0;function pick(){var best=null,bi=-1;var lim=Math.max(88,innerHeight*.14);band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)&&x.getBoundingClientRect().top<=lim){bi=i;best=x}});if(!best)band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)){bi=i;best=x}});if(best){rtry=0;setAct(best.id)}else if(band.size&&rtry<8){rtry++;clearTimeout(rt);rt=setTimeout(pick,90)}}
+ var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});rtry=0;pick()},{rootMargin:'0px 0px -75% 0px'});
+ addEventListener('scrollend',function(){rtry=0;pick()},{passive:true});
  var ioR=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){markRead(e.target.id);ioR.unobserve(e.target)}})},{rootMargin:'0px 0px -40% 0px'});
  secs.forEach(function(x){ioA.observe(x);if(x.classList.contains('l2'))ioR.observe(x)})}
 var p=$('#prog'),H=0,de=d.documentElement;function measure(){H=Math.max(1,de.scrollHeight-innerHeight)}measure();

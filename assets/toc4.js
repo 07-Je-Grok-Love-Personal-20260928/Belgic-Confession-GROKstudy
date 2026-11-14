@@ -45,7 +45,7 @@ grip.addEventListener('dblclick',reset);
 grip.addEventListener('keydown',function(e){var st=e.shiftKey?64:16,v=curW(),l=lim();
   if(e.key==='ArrowLeft')v-=st;else if(e.key==='ArrowRight')v+=st;else if(e.key==='Home')v=l[0];else if(e.key==='End')v=l[1];else if(e.key==='Enter'){reset();return}else return;e.preventDefault();apply(v,true)});
 var rt=0;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){var v=curW(),c=clamp(v);if(c!==v)apply(c,false);else aria(v)},120)},{passive:true});
-aria(curW());
+(function(){var k=wide()?KW:KM,sw=+ld(k);if(sw){var c=clamp(sw);de.style.setProperty(wide()?'--tkw':'--tkwm',c+'px')}aria(curW())})();
 /* ---------- 搜索过滤 ---------- */
 var all=$$('.tk-i',nav).map(function(li){var t=li.firstChild.textContent;return {li:li,t:t.toLowerCase().replace(/\s+/g,'')}});
 var qt=0;if(q)q.addEventListener('input',function(){clearTimeout(qt);qt=setTimeout(filter,90)});

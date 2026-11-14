@@ -131,3 +131,10 @@ html.mkoff .mk-hl,html.mkoff .mk-core{transition:none}
 #toc .tk1>.tk-row>a.on .tk-n{color:#fff}
 html:is([data-theme=dawn],[data-theme=parch]) #toc .tk-row>a.on{background:linear-gradient(90deg,rgba(var(--A),.30),rgba(var(--A),.16));color:#1b1405;box-shadow:inset 3px 0 0 rgba(var(--A),1)}
 html:is([data-theme=dawn],[data-theme=parch]) #toc .tk-row>a.on .tk-t,html:is([data-theme=dawn],[data-theme=parch]) #toc .tk2>.tk-row>a.on .tk-n,html:is([data-theme=dawn],[data-theme=parch]) #toc .tk3>.tk-row>a.on .tk-n{color:#1b1405}
+/* v4 QA: flashcards grow with long answers (faces stacked in one grid cell instead of absolute) */
+.flip{height:auto;min-height:130px}.fi{display:grid;min-height:130px;height:100%}.ff,.fb{position:relative;inset:auto;grid-area:1/1;min-height:130px;overflow:visible}
+.livebox,.lmap{overflow:hidden}
+/* v4 QA: grids follow the real content width (TOC can be dragged wide), not the viewport */
+.grid.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+.grid.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}

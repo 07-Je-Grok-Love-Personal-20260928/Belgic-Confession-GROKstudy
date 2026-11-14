@@ -9,7 +9,8 @@ JS='''()=>{const res=[];document.querySelectorAll('figure svg').forEach((svg,si)
    for(let j=i+1;j<ts.length;j++){const b=ts[j];const ox=Math.min(a.x1,b.x1)-Math.max(a.x0,b.x0),oy=Math.min(a.y1,b.y1)-Math.max(a.y0,b.y0);
      if(ox>3&&oy>3) res.push(['重叠',si,a.s,b.s,Math.round(ox),Math.round(oy)]);}}
 });return res}'''
-pages=sys.argv[1:] or ['bible.html','hc.html','bc.html','dort.html','compare.html','westminster.html','memory.html']
+import glob
+pages=sys.argv[1:] or sorted(glob.glob('*.html'))
 bad=0
 with sync_playwright() as p:
     b=p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])

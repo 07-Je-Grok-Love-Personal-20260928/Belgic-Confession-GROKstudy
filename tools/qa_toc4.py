@@ -41,7 +41,7 @@ with sync_playwright() as p:
             ok(pg.evaluate("localStorage.getItem('tk4.w')")==str(w1),T+' 宽度已记忆')
             drag(pg,cdp,2000,kind); ok(W(pg)==hi,T+f' 上限 {W(pg)}!={hi}')
             drag(pg,cdp,-3000,kind); ok(W(pg)==lo,T+f' 下限 {W(pg)}!={lo}')
-            drag(pg,cdp,123,'mouse'); wk=W(pg); pg.reload(); pg.wait_for_timeout(400); ok(abs(W(pg)-wk)<=1,T+f' 刷新后宽度保持 {W(pg)} vs {wk}')
+            drag(pg,cdp,123,'mouse'); wk=W(pg); pg.wait_for_timeout(600); pg.reload(); pg.wait_for_timeout(400); ok(abs(W(pg)-wk)<=1,T+f' 刷新后宽度保持 {W(pg)} vs {wk}')
             pg.focus('#tocgrip'); a=W(pg); pg.keyboard.press('ArrowRight'); pg.keyboard.press('ArrowRight'); ok(W(pg)>a,T+' 键盘右键加宽')
             pg.keyboard.press('Home'); ok(W(pg)==lo,T+' Home=最窄'); pg.keyboard.press('End'); ok(W(pg)==hi,T+' End=最宽')
             pg.dblclick('#tocgrip'); pg.wait_for_timeout(200); ok(pg.evaluate("localStorage.getItem('tk4.w')") is None,T+' 双击复位')
@@ -67,9 +67,9 @@ with sync_playwright() as p:
             if f!='index.html':
                 sid=pg.evaluate("(()=>{const a=[...document.querySelectorAll('#toc .tk-i.is-cur a[data-s]')];const t=a[Math.floor(a.length*0.6)];return t?t.dataset.s:null})()")
                 if sid:
-                    pg.evaluate("s=>{document.getElementById(s).scrollIntoView();window.scrollBy(0,40)}",sid); pg.wait_for_timeout(700)
+                    pg.evaluate("s=>{document.getElementById(s).scrollIntoView({behavior:'instant'});window.scrollBy({top:40,behavior:'instant'})}",sid); pg.wait_for_timeout(700)
                     on=pg.evaluate("document.querySelector('#toc a.on')?.dataset.s"); ok(on is not None,T+f' 滚动高亮存在 (目标 {sid} 现 {on})')
-                    ok(pg.evaluate("(()=>{const a=document.querySelector('#toc a.on');if(!a)return false;const r=a.getBoundingClientRect(),b=document.getElementById('tkbody').getBoundingClientRect();return r.top>=b.top-2&&r.bottom<=b.bottom+2})()"),T+' 高亮项自动滚入目录可视区')
+                    ok(pg.evaluate("(()=>{let a=document.querySelector('#toc a.on');if(a&&!a.offsetParent){let li=a.closest('.tk-i');while(li&&!li.offsetParent)li=li.parentElement.closest('.tk-i');a=li&&li.querySelector('a');if(!a||!a.closest('.on-p'))return false}if(!a)return false;const r=a.getBoundingClientRect(),b=document.getElementById('tkbody').getBoundingClientRect();return r.top>=b.top-2&&r.bottom<=b.bottom+2})()"),T+' 高亮项自动滚入目录可视区')
             # 隐藏 + 记忆
             pg.click('#tocx'); pg.wait_for_timeout(400); ok(not pg.evaluate('TK.isOpen()'),T+' ✕ 隐藏')
             m=pg.evaluate("document.getElementById('main').getBoundingClientRect().left"); ok(m<5,T+f' 隐藏后正文占满 {m}')
