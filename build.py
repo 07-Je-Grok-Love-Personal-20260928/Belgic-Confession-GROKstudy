@@ -57,17 +57,15 @@ def pager(cur):
     if i<len(ks)-1: out+=f'<a class="pg next" href="{FILE[ks[i+1]]}"><small>下一页 →</small><b>{LABEL[ks[i+1]]}</b></a>'
     return out+'</nav>'
 DESC={"index":"比利时信条（1561，德布利）欧陆改革宗中文深读：全本圣经与圣约、历史地理文化、37 条逐条深读、三项联合信条比较、CCI 原文逐字、背诵与自测。"}
-MERMAID='''<script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-mermaid.initialize({startOnLoad:false,securityLevel:"strict",theme:"base",flowchart:{htmlLabels:true,curve:"basis",useMaxWidth:true},themeVariables:{fontFamily:"PingFang SC, Noto Sans SC, Microsoft YaHei, sans-serif",fontSize:"14px",primaryColor:"#24345f",primaryTextColor:"#ffffff",primaryBorderColor:"#d4af37",lineColor:"#d4af37",secondaryColor:"#2c2550",tertiaryColor:"#16203f",clusterBkg:"#16203f",clusterBorder:"#5aa9e6",titleColor:"#f3d98b",edgeLabelBackground:"#0d1838",textColor:"#e8ecf6",nodeTextColor:"#ffffff"}});
-const els=[...document.querySelectorAll("pre.mermaid")];const run=async(el)=>{if(el.dataset.processed)return;try{await mermaid.run({nodes:[el]})}catch(e){el.insertAdjacentHTML("afterend","<p class=mermaid-err>流程图未能渲染，上方为文字版。</p>")}};
-if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);(e.target.matches("pre.mermaid")?[e.target]:[...e.target.querySelectorAll("pre.mermaid")]).forEach(run)}}),{rootMargin:"1500px"});new Set(els.map(e=>e.closest("section.l2")||e)).forEach(t=>io.observe(t))}else els.forEach(run);</script>'''
+MERMAID='''<script>(()=>{let mermaid;const lib=()=>new Promise((ok,no)=>{if(window.mermaid)return ok(window.mermaid);const s=document.createElement("script");s.src="assets/mermaid/mermaid.min.js";s.onload=()=>ok(window.mermaid);s.onerror=no;document.head.appendChild(s)});const boot=async()=>{if(mermaid)return mermaid;mermaid=await lib();mermaid.initialize({startOnLoad:false,securityLevel:"strict",theme:"base",flowchart:{htmlLabels:true,curve:"basis",useMaxWidth:true},themeVariables:{fontFamily:"PingFang SC, Noto Sans SC, Microsoft YaHei, sans-serif",fontSize:"14px",primaryColor:"#24345f",primaryTextColor:"#ffffff",primaryBorderColor:"#d4af37",lineColor:"#d4af37",secondaryColor:"#2c2550",tertiaryColor:"#16203f",clusterBkg:"#16203f",clusterBorder:"#5aa9e6",titleColor:"#f3d98b",edgeLabelBackground:"#0d1838",textColor:"#e8ecf6",nodeTextColor:"#ffffff"}});return mermaid};
+const els=[...document.querySelectorAll("pre.mermaid")];const run=async(el)=>{if(el.dataset.processed)return;try{await (await boot()).run({nodes:[el]})}catch(e){el.insertAdjacentHTML("afterend","<p class=mermaid-err>流程图未能渲染，上方为文字版。</p>")}};
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);(e.target.matches("pre.mermaid")?[e.target]:[...e.target.querySelectorAll("pre.mermaid")]).forEach(run)}}),{rootMargin:"1500px"});new Set(els.map(e=>e.closest("section.l2")||e)).forEach(t=>io.observe(t))}else els.forEach(run);})();</script>'''
 def extra_js(cur,body):
     o=""
-    if 'id="lmap"' in body: o+='<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>'
     if 'class="mermaid"' in body: o+=MERMAID
     return o
 def extra_css(cur,body):
-    return '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">' if 'id="lmap"' in body else ''
+    return ''
 def page(cur,body):
     n={k:len(re.findall(r'<section class="l2',h)) for k,h in BODY.items()}
     title=LABEL[cur]+" · "+SITE if cur!="index" else "比利时信条 · 欧陆改革宗深读（Belgic Confession GROKstudy）"

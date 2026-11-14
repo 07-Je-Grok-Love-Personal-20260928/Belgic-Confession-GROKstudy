@@ -304,7 +304,7 @@ def part_atlas():
         cards([("📐","示意图永远在","SVG 画在页面里，不请求任何地图服务器。网络不稳时，先读示意图和表。",GOLD),
                ("🛰️","实时地图可换源","OpenStreetMap、OSM 法国/HOT、CARTO、Esri 街道/地形/卫星、OpenTopoMap；中国大陆可试高德（有偏移）。",BLUE),
                ("🔁","自动回退","某一源超时或连续失败，会换下一个。你的选择记在本地。",GREEN),
-               ("📦","Leaflet 在本站","库文件放在 assets/leaflet/，不依赖 unpkg 等 CDN。",VIO)],"g4")
+               ("📦","Leaflet 在本站","库文件放在 assets/leaflet/，不依赖任何外部 CDN；流程图库 Mermaid 同样放在本站 assets/mermaid/。",VIO)],"g4")
         +note("高德（AutoNavi）瓦片使用 GCJ-02，俗称火星坐标，在欧洲会整体偏移，不能当精确地理用，只作备用通道。"))
     b+=L2("at-bres","2续.1","德布利的足迹",
         '<p>一条路，把信条的语气说清楚：它为什么克制（要给国王看），又为什么温暖（要给受苦的会众用）。</p>'

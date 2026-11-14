@@ -1,12 +1,12 @@
 # belgic-confession-20261114-v3-GROKstudy
 
-**《比利时信条》（Belgic Confession, 1561）· 欧陆改革宗深读**：简体中文多页学习站，页脚版本号为 `v20261114-3`（v3.0.0）。
+**《比利时信条》（Belgic Confession, 1561）· 欧陆改革宗深读**：简体中文多页学习站，页脚版本号为 `v20261114-3.1`（v3.1.0）。
 
 站点从整本圣经与圣约的大图景讲起，然后讲历史、地理与文化（并配地图集），再把 37 条逐条展开。之后是专题深析、三项联合信条比较、威斯敏斯特对照，以及 BC / HC / Dort 与三大信经的原文背诵版、记忆自测。
 
 > **引文规则**：全站信条原文和中文引号内的引文，都逐字取自 [CCI《赞美手册》中文版](https://ccifellowship.org/books/book-of-praise)。构建时由程序做子串核对（`core.Q`、`tools/verify_exact.py`），核对不过就不能构建。CCI 没有的内容，用用户提供的《中国改革宗教会敬拜手册》2015 版逐字摘引，并标明页码。
 
-## 在线地址（当前 v3.0.0）
+## 在线地址（当前 v3.1.0）
 
 | 部署 | 地址 |
 |---|---|
@@ -21,6 +21,13 @@
 - v1.0.0：[标签](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v1.0.0) · https://belgic-confession-20261023-v1-grokstudy.surge.sh/ · https://belgic-confession-20261023-v1-grokstudy.netlify.app/
 
 命名规则：仓库名只用主题（`Belgic-Confession-GROKstudy`）；Surge / Netlify 的域名用“主题-日期-版本-grokstudy”。
+
+## v3.1.0 说明（2026-11-14 13:10，台北时间）
+
+- **流程图库本地化**：Mermaid 11.17.2（MIT，附 `assets/mermaid/LICENSE`）放在 `assets/mermaid/mermaid.min.js`，图表接近视口时才从本站加载。站内页面与资源已无任何 CDN 引用（jsdelivr、unpkg、cdnjs、googleapis 全站搜索为 0）；唯一的外部请求是实时地图的底图瓦片，屏蔽时自动回退并保留离线示意图。
+- **离线测试**：新增 `tools/qa_mermaid.py`，屏蔽一切外部网络，流程图在 390 / 1280 宽度下都正常渲染（9 个节点，无溢出）。
+- **清理**：删除构建脚本中残留的 unpkg Leaflet 与 jsdelivr 预连接代码；删除重复创建的空 Netlify 站点。
+- **QA 全部 0 失败**：9 种宽度 × 14 页 × 6 种主题（全部展开 + 目录打开）、收起状态、底图屏蔽状态、点击测试、链接 5992 个 0 坏链、原文逐字 513 段 0 缺失、背诵版逐行核对、示意图标签重叠 0。
 
 ## v3.0.0 说明（2026-11-14，台北时间）
 
@@ -108,6 +115,7 @@ python3 tools/qa.py           # 默认宽度 320/360/390/414/768/1024/1280/1440/
 THEME=dawn python3 tools/qa.py --open --toc
 python3 tools/qa.py --offline-tiles atlas.html hist.html
 python3 tools/qa_click.py       # 点击交互 + 底图切换/回退
+python3 tools/qa_mermaid.py     # 屏蔽外网时流程图渲染
 python3 tools/svg_overlap.py atlas.html hist.html  # 示意图标签重叠
 OUT=perf.json python3 tools/perf3.py . index.html atlas.html  # 交互帧率
 ```
@@ -116,6 +124,7 @@ OUT=perf.json python3 tools/perf3.py . index.html atlas.html  # 交互帧率
 
 | 版本 | 日期（台北时间） | 说明 |
 |---|---|---|
+| v3.1.0 | 2026-11-14 13:10 | Mermaid 本站托管，全站无 CDN 依赖；离线流程图测试；清理残留 CDN 代码。地址同 v3：[Pages](https://07-je-grok-love-personal-20260928.github.io/Belgic-Confession-GROKstudy/) · [Surge](https://belgic-confession-20261114-v3-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261114-v3-grokstudy.netlify.app/) · [发布 v3.1.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v3.1.0) |
 | v3.0.0 | 2026-11-14 | 地图集：七张成对地图（离线示意 + 多源实时底图，Leaflet 本站托管）；加深历史地理；笔记标记加厚。地址：[Pages](https://07-je-grok-love-personal-20260928.github.io/Belgic-Confession-GROKstudy/) · [Surge](https://belgic-confession-20261114-v3-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261114-v3-grokstudy.netlify.app/) · [发布 v3.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v3.0.0)（2026-11-14 12:58 台北） |
 | v2.0.0 | 2026-10-23 | 性能与阅读体验版：去掉重复毛玻璃、合并资源、按需加载；六种主题；笔记式标注与图例；柱状图与环形图；收紧内容。地址：[Surge](https://belgic-confession-20261023-v2-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261023-v2-grokstudy.netlify.app/) · [标签 v2.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v2.0.0) |
 | v1.0.0 | 2026-10-23 | 首发。12 部分完整上线。地址：[Surge](https://belgic-confession-20261023-v1-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261023-v1-grokstudy.netlify.app/) · [标签 v1.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v1.0.0) |
