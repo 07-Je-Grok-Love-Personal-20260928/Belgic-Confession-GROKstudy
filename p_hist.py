@@ -7,6 +7,7 @@ from widgets import *
 from whole import pagecore, stk, metro
 from geo import mapsvg
 import storymap as SM
+import maps as ATLAS
 GOLD,BLUE,GREEN,RED,VIO,ORG,CY="#d4af37","#5aa9e6","#81b29a","#e07a5f","#a78bfa","#e0a85f","#6bb8d6"
 SHI='<span class="srcchip shi" title="教会史通识：本站整理">🏛 史</span>'
 CCIc='<span class="srcchip cci">📘 CCI</span>'
@@ -80,7 +81,7 @@ def part_hist():
     m=mapsvg("bch","图尔奈与低地国家：BC 的土地（SVG 示意）",pts,routes=[("图尔奈（杜内克）","瓦朗谢讷"),("图尔奈（杜内克）","埃姆登"),("安特卫普","米德尔堡")],hl=("图尔奈（杜内克）","瓦朗谢讷"),bbox=(2,9.5,49.6,54),
        off={"图尔奈（杜内克）":(14,-10,'start'),"瓦朗谢讷":(-14,10,'end'),"里尔":(-14,-8,'end'),"蒙斯":(14,16,'start'),"布鲁塞尔":(14,-10,'start'),"根特":(-14,-8,'end'),"安特卫普":(14,-6,'start'),"米德尔堡":(-14,-6,'end'),"阿姆斯特丹":(14,-8,'start'),"莱顿":(-14,-8,'end'),"多德雷赫特":(14,18,'start'),"韦瑟尔":(14,12,'start'),"埃姆登":(14,-8,'start')},
        blobs=[("南部：瓦隆与佛兰德",2.9,50.45,1.0,0.5,GOLD),("北部：荷兰、泽兰",4.7,52.0,1.1,0.7,BLUE)],cap="；SVG 示意图，不绘海岸线；图尔奈即荷语 Doornik。")
-    b+=L2("hs-map","2.4","地理：德布利的足迹与信条的版图",lmap()+m
+    b+=L2("hs-map","2.4","地理：德布利的足迹与信条的版图",ATLAS.block_bres()+m+ATLAS.hist_more()
         +stk(["地点","今属","与 BC 的关系"],[[n,{"蒙斯 Mons":"比利时","图尔奈 Tournai":"比利时","安特卫普 Antwerp":"比利时","瓦朗谢讷 Valenciennes":"法国","里尔 Lille":"法国","色当 Sedan":"法国","巴黎 Paris":"法国","韦瑟尔 Wesel":"德国","埃姆登 Emden":"德国","海德堡 Heidelberg":"德国","米德尔堡 Middelburg":"荷兰","多德雷赫特 Dordrecht":"荷兰","伦敦 London":"英国","洛桑 Lausanne":"瑞士","日内瓦 Geneva":"瑞士","马德里 Madrid":"西班牙"}[n],t] for n,_,_,t,_,_ in PLACES])
         +key("<b>地理记忆：</b>“南写北存”——信条写在南方法语区（图尔奈、瓦朗谢讷），逼迫最重；后来在北方（荷兰、泽兰）和流亡地（埃姆登）存活、被采纳，最终在多德雷赫特定稿。"))
     cul=[("🗣️","法语写成的“荷兰”信条","BC 原文是法文（Confession de foy），作者来自说法语的瓦隆地区；1562 年才译成荷兰文。名字“比利时”来自拉丁文 Belgica＝整个低地国家。",GOLD),

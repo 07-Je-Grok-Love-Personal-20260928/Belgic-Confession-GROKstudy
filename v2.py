@@ -2,8 +2,8 @@
 """v2 后处理：合并并压缩 CSS/JS、懒加载 Leaflet/Mermaid、预取、图片懒加载。"""
 import re
 from core import V
-CSS = ["assets/styles.css", "assets/t87.css", "assets/bc.css", "assets/v2.css"]
-JS = ["assets/app.js", "assets/t87.js", "assets/bc.js", "assets/v2.js"]
+CSS = ["assets/styles.css", "assets/t87.css", "assets/bc.css", "assets/v2.css", "assets/v3.css"]
+JS = ["assets/app.js", "assets/t87.js", "assets/bc.js", "assets/v2.js", "assets/maps.js"]
 
 def _mincss(c):
     c = re.sub(r'/\*.*?\*/', '', c, flags=re.S)
@@ -27,7 +27,10 @@ def post(h, k):
     h = re.sub(r'<link rel="stylesheet" href="https://unpkg\.com/leaflet[^>]+>', '', h)
     h = re.sub(r'<script src="https://unpkg\.com/leaflet[^>]+></script>', '', h)
     pre = ""
-    if 'id="lmap"' in h: pre += '<link rel="preconnect" href="https://unpkg.com" crossorigin><link rel="preconnect" href="https://tile.openstreetmap.org">'
+    if 'class="livebox"' in h or 'id="lmap"' in h:
+        pre += ('<link rel="preconnect" href="https://tile.openstreetmap.org">'
+                '<link rel="preconnect" href="https://basemaps.cartocdn.com" crossorigin>'
+                '<link rel="preconnect" href="https://server.arcgisonline.com">')
     if 'class="mermaid"' in h: pre += '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>'
     h = h.replace('</head>', pre + f'<link rel="stylesheet" href="assets/site.css?v={V}"></head>', 1)
     h = h.replace('</body>', f'<script src="assets/site.js?v={V}" defer></script>{SPEC}</body>', 1)

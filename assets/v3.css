@@ -1,0 +1,67 @@
+/* v3：地图对、示意动画、更清晰的笔记标记、更便宜的绘制 */
+.mapduo{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin:18px 0;min-width:0}
+@media(min-width:1100px){.mapduo:not(.wide){grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}}
+.sche,.livemap{margin:0;min-width:0;padding:0;border-radius:16px;border:1px solid rgba(var(--W),.12);background:rgba(var(--W),.04);overflow:hidden}
+.sche{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sche svg{width:100%;height:auto;display:block;min-width:0}
+@media(max-width:700px){.sche svg{min-width:640px}}
+.sche figcaption,.livemap figcaption{font-size:.84rem;color:var(--mut);padding:8px 12px 12px;line-height:1.55}
+.mapbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid rgba(var(--W),.1);font-size:.86rem}
+.mapbar label{color:var(--mut);font-weight:700}
+.tilesel{flex:1 1 180px;min-width:0;max-width:100%;background:var(--pnl);color:var(--tx);border:1px solid rgba(var(--W),.2);border-radius:8px;padding:6px 8px}
+.mapstat{color:var(--mut);font-size:.8rem}
+.livebox,.lmap{height:clamp(280px,52vh,540px);width:100%;border-radius:0;border:0;background:#0e1733;z-index:0;contain:layout paint;transform:translateZ(0)}
+.lfail{padding:20px;color:var(--mut);margin:0}
+.leaflet-container{font:inherit;background:#0e1733}
+.leaflet-container img.leaflet-tile{pointer-events:none}
+.mtip,.leaflet-tooltip{font:12px/1.3 "PingFang SC","Noto Sans SC",sans-serif}
+.mapjump{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}
+.mapjump a{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(var(--W),.16);background:rgba(var(--W),.06);text-decoration:none;color:inherit;font-size:.86rem}
+.mapjump a:hover{border-color:var(--gold)}
+.mapmore{margin:8px 0 0}
+/* 示意图动画：只用 transform / opacity / dashoffset */
+.sch .stitle{fill:#f3e6c0;font:700 18px/1.2 "PingFang SC","Noto Sans SC",sans-serif}
+.sch .ssub,.sch .sfoot,.sch .rg{fill:#c9d4e8;font:12px/1.35 "PingFang SC","Noto Sans SC",sans-serif}
+.sch .sfoot{fill:#9fb0c8;font-size:11px}
+.sch .dash{fill:none;stroke:#d4af37;stroke-width:2.2;stroke-dasharray:9 8;stroke-linecap:round}
+.sch .sea{fill:none;stroke:#5aa9e6;stroke-width:10;opacity:.18;stroke-linecap:round}
+.sch .pt circle{fill:var(--c,#d4af37);stroke:#fff;stroke-width:2}
+.sch .pt text{fill:#eef3ff;font:12px/1 "PingFang SC","Noto Sans SC",sans-serif}
+.sch .chip rect{fill:var(--c);fill-opacity:.22;stroke:var(--c);stroke-width:1.2}
+.sch .chip text{fill:#eef3ff;font:11px/1 "PingFang SC","Noto Sans SC",sans-serif}
+.boat{transform:translate(120px,270px);animation:sail 18s linear infinite}
+@keyframes sail{to{transform:translate(760px,230px)}}
+@keyframes dash{to{stroke-dashoffset:-240}}
+@keyframes pulse{50%{transform:scale(1.18)}}
+@keyframes glow{50%{opacity:.45}}
+.js .sch .dash{animation:dash 22s linear infinite}
+.js .sch .delay{animation-delay:-7s}
+.js .sch .delay2{animation-delay:-13s}
+.js .sch .pulse circle,.js .sch .pulse.chip rect{transform-box:fill-box;transform-origin:center;animation:pulse 2.4s ease-in-out infinite}
+.js .sch .glow{animation:glow 3s ease-in-out infinite;opacity:.7}
+/* 旧示意地图在窄屏不要撑破页面：滚动限制在容器内 */
+.map{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.map svg{min-width:0}
+@media(max-width:700px){.map svg{min-width:640px}}
+/* 笔记标记：加厚、加间距，浅色主题提高对比 */
+.mk-hl{background-image:linear-gradient(transparent 58%,color-mix(in srgb,var(--c-hl,#ffe56a) 80%,transparent) 58%);background-size:100% 100%;padding:0 .15em;border-radius:2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.mk-u{text-decoration-line:underline;text-decoration-style:solid;text-decoration-color:var(--c-key,#e9c46a);text-decoration-thickness:2px;text-underline-offset:.28em}
+.mk-x{text-decoration-line:underline;text-decoration-style:wavy;text-decoration-color:var(--c-x,#ff6b6b);text-decoration-thickness:2px;text-underline-offset:.28em}
+.mk-w{text-decoration-line:underline;text-decoration-style:double;text-decoration-color:var(--c-w,#ff9f43);text-underline-offset:.22em;text-decoration-thickness:1.5px}
+.mk-ref{text-decoration-line:underline;text-decoration-style:dashed;text-decoration-color:var(--c-vs,#6cb8ff);text-decoration-thickness:2px;text-underline-offset:.22em;font-variant-numeric:tabular-nums}
+.mk-d{text-decoration-line:underline;text-decoration-style:dotted;text-decoration-color:var(--c-dt,#5fd3c4);text-decoration-thickness:2.5px;text-underline-offset:.22em;font-variant-numeric:tabular-nums}
+.mk-a{background:color-mix(in srgb,var(--c-abg,#6fd3a0) 28%,transparent);padding:.05em .2em;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.mklegend{position:relative;gap:8px}
+.call{contain:content}
+/* 性能：降低大面积阴影与 hover 合成成本 */
+.card,.fc,.act,.vcard{box-shadow:0 6px 18px rgba(0,0,0,.16);transition:transform .2s ease}
+.card:hover,.fc:hover,.act:hover,.vcard:hover{transform:translate3d(0,-3px,0)}
+.l3,.ldc{content-visibility:auto;contain-intrinsic-size:auto 900px;contain:content}
+.livebox,.leaflet-container{content-visibility:visible!important}
+#toc{will-change:auto}
+/* 主题切换时不要让所有卡片一起过渡颜色 */
+html.thx *{transition:none!important}
+@media(prefers-reduced-motion:reduce){
+  .boat,.sch .dash,.sch .pulse circle,.sch .pulse.chip rect,.sch .glow,body::after{animation:none!important}
+  .card:hover,.fc:hover,.act:hover,.vcard:hover{transform:none}
+}

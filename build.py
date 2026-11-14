@@ -6,19 +6,19 @@ import core
 from c_common import *
 import pdf15,storymap
 import c_compare,c_west,c_src,libs
-import v2, p_bible,p_hist,p_bc,p_topics,p_mem
+import v2, p_bible,p_hist,p_bc,p_topics,p_mem, maps
 
 SITE="比利时信条 · 欧陆改革宗深读"
-PAGES=[("index","index.html","首页","home"),("bible","bible.html","一 全本圣经与圣约","book"),("hist","hist.html","二 历史·地理·文化","map"),("bc","bc.html","三 37条逐条深读","scroll"),
+PAGES=[("index","index.html","首页","home"),("bible","bible.html","一 全本圣经与圣约","book"),("hist","hist.html","二 历史·地理·文化","map"),("atlas","atlas.html","二续 地图集","map"),("bc","bc.html","三 37条逐条深读","scroll"),
  ("topics","topics.html","四 专题深析","brain"),("compare","compare.html","五 三项联合信条比较","link"),("westminster","westminster.html","六 威斯敏斯特对照","scale"),
  ("bct","bct.html","七 BC 原文·背诵","scroll"),("hct","hct.html","八 HC 原文·背诵","scroll"),("dtt","dtt.html","九 Dort 原文·背诵","scroll"),("creedsx","creedsx.html","十 三大信经","scroll"),
  ("memory","memory.html","十一 记忆自测","brain"),("sources","sources.html","十二 来源","library")]
 if "home" not in P: P["home"]=P["book"]
-PARTS={"bible":p_bible.part_bible,"hist":p_hist.part_hist,"bc":p_bc.part_bc,"topics":p_topics.part_topics,"compare":c_compare.part_compare,"westminster":c_west.part_westminster,
+PARTS={"bible":p_bible.part_bible,"hist":p_hist.part_hist,"atlas":maps.part_atlas,"bc":p_bc.part_bc,"topics":p_topics.part_topics,"compare":c_compare.part_compare,"westminster":c_west.part_westminster,
  "hct":libs.part_hct,"bct":libs.part_bct,"dtt":libs.part_dtt,"creedsx":libs.part_creedsx,"memory":p_mem.part_memory}
 FILE={k:f for k,f,_,_ in PAGES}; LABEL={k:t for k,_,t,_ in PAGES}
 BODY={}
-L1N={"bible":1,"hist":2,"bc":3,"topics":4,"compare":5,"westminster":6,"bct":7,"hct":8,"dtt":9,"creedsx":10,"memory":11,"sources":12}
+L1N={"bible":1,"hist":2,"atlas":"2续","bc":3,"topics":4,"compare":5,"westminster":6,"bct":7,"hct":8,"dtt":9,"creedsx":10,"memory":11,"sources":12}
 for k,_,_,_ in PAGES[1:]:
     core.CUR["f"]=FILE[k]; core.CUR["n"]=L1N[k]; core.CUR["c2"]=0
     if k=="sources": BODY[k]=c_src.part_src(BODY)
@@ -80,7 +80,7 @@ def page(cur,body):
 def index_body():
     hc=J("hc"); nq=sum(1 for l in hc["lds"] for b in l["blocks"] if b["t"]=="h4")
     bcn=len(J("bc")["articles"]); dn=sum(len(h["items"]) for h in J("dort")["heads"])
-    desc={"bible":"四幕救恩史 · 九个约 · 八条圣经神学主线 · 五个唯独 · 流程图","hist":"德布利的故事 · 时间线 · 交互地图 · 文化区域 · 版画图像 · 狱中书信",
+    desc={"bible":"四幕救恩史 · 九个约 · 八条圣经神学主线 · 五个唯独 · 流程图","hist":"德布利的故事 · 时间线 · 交互地图 · 文化区域 · 版画图像 · 狱中书信","atlas":"七张成对地图：离线示意图 + 多源实时底图",
       "bc":"37 条 × 六个面向：为何写 · 说什么 · 圣经神学 · 圣约 · 对手 · 联系；重点/难点/应用/记忆钩","topics":"三条战线 · 与法国信条比较 · 八个难点 · 安慰线 · 误解 · 数据图",
       "compare":"为什么是三份而不是一份：体裁、问题、对照矩阵、签署书","westminster":"WCF/WLC/WSC 十五个主题的对读","bct":"37 条逐字全文（CCI）· 背诵模式 · 朗读","hct":"129 问逐字全文（CCI）· 背诵模式","dtt":"63 个条目逐字全文（CCI）· 背诵模式",
       "creedsx":"使徒 · 尼西亚 · 亚他那修（CCI）背诵版","memory":"七群口诀 · 37 个钩子 · 填空 · 翻卡 · 25 题自测 · 37 天计划","sources":"CCI 逐字 · PDF 手册 · 参考站 · 图片版权"}
@@ -89,11 +89,11 @@ def index_body():
     hero=f'''<header class="hero bchero"><div class="hin"><div class="badge">欧陆改革宗 · 三项联合信条之一 · 1561</div><h1>比利时信条<br><span>Confessio Belgica · 一份从十字架下写出的告白</span></h1><p>德布利（Guido de Brès）在西班牙哈布斯堡的逼迫下写下 37 条“我们相信”。本站先看<b>整本圣经与圣约</b>，再走进<b>历史与地理</b>，然后<b>逐条深读</b>：为什么写、写了什么、怎样应用。所有信条引文<b>逐字取自 CCI《赞美手册》中文版</b>，并由程序核对。</p>
 <div class="trio"><a href="bible.html" class="tri" style="--c:#5aa9e6"><i>{ic("book","ic big")}</i><b>整体</b><small>全本圣经与圣约</small></a><a href="hist.html" class="tri" style="--c:#e07a5f"><i>{ic("map","ic big")}</i><b>处境</b><small>1561 · 图尔奈 · 殉道</small></a><a href="bc.html" class="tri" style="--c:#d4af37"><i>{ic("scroll","ic big")}</i><b>局部</b><small>37 条逐条深读</small></a></div>
 <div class="stats"><div><b data-count="{bcn}">{bcn}</b><small>条信条</small></div><div><b data-count="7">7</b><small>个分群</small></div><div><b data-count="9">9</b><small>个圣约节点</small></div><div><b data-count="222">222</b><small>张六面卡</small></div></div>
-<div class="hbtn"><a class="btn" href="bible.html">开始：全本圣经视角</a><a class="btn ghost" href="hist.html">德布利的故事</a><a class="btn ghost" href="bc.html#bx-map">37 条地图</a><a class="btn ghost" href="bct.html">原文背诵</a></div></div></header>'''
-    prog='''<section class="l1" id="path"><header class="l1h reveal"><span class="ico">'''+ic("map","ic big")+'''</span><div><div class="kick">学习路径</div><h2>十二站学习路径与进度</h2><p class="lead">建议顺序：整体（圣经与圣约）→ 处境（历史地理）→ 局部（逐条）→ 专题 → 比较 → 原文背诵 → 自测。进度只保存在你的浏览器里（localStorage），不上传。</p></div></header>
+<div class="hbtn"><a class="btn" href="bible.html">开始：全本圣经视角</a><a class="btn ghost" href="hist.html">德布利的故事</a><a class="btn ghost" href="atlas.html">地图集</a><a class="btn ghost" href="bc.html#bx-map">37 条地图</a><a class="btn ghost" href="bct.html">原文背诵</a></div></div></header>'''
+    prog='''<section class="l1" id="path"><header class="l1h reveal"><span class="ico">'''+ic("map","ic big")+'''</span><div><div class="kick">学习路径</div><h2>学习路径与进度</h2><p class="lead">建议顺序：整体（圣经与圣约）→ 处境（历史地理与地图集）→ 局部（逐条）→ 专题 → 比较 → 原文背诵 → 自测。进度只保存在你的浏览器里（localStorage），不上传。</p></div></header>
 <div class="progbox reveal"><div class="ring2" id="ringbox"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="rb"/><circle cx="60" cy="60" r="52" class="rf" id="ringf" pathLength="100" stroke-dasharray="0 100"/></svg><div class="rt"><b id="ringn">0%</b><small>已读小节</small></div></div><div class="pinfo"><p>已读 <b id="readn">0</b> / <b id="readt">0</b> 个小节（滚动到小节即记为已读）。自测最近得分：<b id="quizs">未做</b>。</p><p><button class="btn ghost" id="resetp" type="button">清除进度</button></p></div></div>
 <div class="steps">'''+steps+'''</div></section>'''
-    vis=[("🌍","交互地图（Leaflet）","德布利一生足迹与 16 个地点，可缩放；另有 SVG 示意图。","hist.html#hs-map"),("🧭","时间线与故事线","1517–今天；动画时间轴与故事步骤。","hist.html#hs-tl"),("🏰","城墙动画","1561 年图尔奈城堡：信条越过城墙。","hist.html#hs-wall"),
+    vis=[("🌍","交互地图集","七张成对地图：离线示意图 + 可切换的多源实时底图。","atlas.html"),("🧭","时间线与故事线","1517–今天；动画时间轴与故事步骤。","hist.html#hs-tl"),("🏰","城墙动画","1561 年图尔奈城堡：信条越过城墙。","hist.html#hs-wall"),
          ("🔀","流程图（Mermaid）","圣约之线、37 条的内在逻辑、七群流程。","bible.html#bb-cov"),("🧩","37 条地图","七群着色方块，点击跳到逐条深读。","bc.html#bx-map"),("🎴","六面卡","每条：为何写·说什么·圣经神学·圣约·对手·联系。","bc.html#bx-1"),
          ("🔊","朗读（TTS）","逐条原文可用浏览器中文语音朗读。","bc.html#bx-1"),("⚔️","三条战线","罗马 · 重洗派 · 路德宗：BC 在跟谁说话。","topics.html#tp-fronts"),("📋","三项联合信条对照","为什么是三份而不是一份。","compare.html"),
          ("✍️","填空 · 翻卡 · 自测","15 句 CCI 金句填空，25 题自测。","memory.html#mem-cloze"),("🔤","背诵版","BC/HC/Dort/三信经原文背诵模式。","bct.html"),("↔️","可拖宽的目录","拖目录右缘金色手柄调宽；可收起。","index.html#idx-vis")]
