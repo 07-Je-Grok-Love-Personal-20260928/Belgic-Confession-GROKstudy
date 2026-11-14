@@ -21,6 +21,18 @@ JS_CLIP='''()=>{const out=[];document.querySelectorAll('main p,main li,main td,m
  const cs=getComputedStyle(el); if(el.closest('svg')||el.closest('#toc')) return;
  if(el.scrollWidth>el.clientWidth+2&&(cs.overflowX==='hidden'||cs.overflowX==='clip')&&el.clientWidth>0&&getComputedStyle(el).display!=='inline') out.push(el.tagName+'.'+el.className+':'+(el.textContent||'').slice(0,20));
  });return out.slice(0,5)}'''
+JS_VCLIP='''()=>{const out=[];document.querySelectorAll('main *').forEach(el=>{
+ if(el.closest('svg')||el.closest('.leaflet-container')||el.closest('pre.mermaid')) return;
+ const cs=getComputedStyle(el); if(!(cs.overflowY==='hidden'||cs.overflowY==='clip')) return;
+ if(cs.webkitLineClamp&&cs.webkitLineClamp!=='none') return;
+ if(el.clientHeight<4||el.scrollHeight<=el.clientHeight+3) return;
+ if(el.closest('details:not([open])')) return;
+ const r=el.getBoundingClientRect(); let bad=null;
+ const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n;
+ while((n=w.nextNode())){ if(!n.textContent.trim()) continue; const p=n.parentElement; if(!p||getComputedStyle(p).visibility==='hidden') continue;
+   const rg=document.createRange(); rg.selectNodeContents(n); for(const q of rg.getClientRects()){ if(q.height&&(q.bottom>r.bottom+2||q.top<r.top-2)){bad=n.textContent.trim().slice(0,16);break} } if(bad) break; }
+ if(bad) out.push(el.tagName+'.'+String(el.className).slice(0,24)+':'+bad+' '+el.scrollHeight+'>'+el.clientHeight);
+ });return out.slice(0,6)}'''
 JS_VIS='''()=>{let n=0,bad=[];document.querySelectorAll('.reveal').forEach(e=>{const o=parseFloat(getComputedStyle(e).opacity);if(o<0.99){n++;if(bad.length<3)bad.push(e.className.slice(0,30))}});return {hidden:n,bad:bad,js:document.documentElement.classList.contains('js')}}'''
 res=[];fail=0
 with sync_playwright() as p:
@@ -42,11 +54,12 @@ with sync_playwright() as p:
                 h=pg.evaluate('document.documentElement.scrollHeight')
                 pg.evaluate('''async(h)=>{const f=()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));for(let y=0;y<h;y+=700){window.scrollTo(0,y);await f();}}''',h)  # 单次 evaluate 内滚动，免去每步往返
                 pg.evaluate('window.scrollTo(0,0)'); pg.wait_for_timeout(200)
-            ov=pg.evaluate(JS_OVER); cl=pg.evaluate(JS_CLIP); vis=pg.evaluate(JS_VIS)
+            ov=pg.evaluate(JS_OVER); cl=pg.evaluate(JS_CLIP); vis=pg.evaluate(JS_VIS); vc=pg.evaluate(JS_VCLIP) if os.environ.get('VCLIP','1')=='1' else []
             bad=[]
             if ov['sw']>ov['vw']+1: bad.append(f"页面横向溢出 sw={ov['sw']} vw={ov['vw']}")
             if ov['n']: bad.append(f"元素越界 {ov['n']}: {ov['over']}")
             if cl: bad.append(f"文字被裁切: {cl}")
+            if vc: bad.append(f"纵向裁切: {vc}")
             if errs: bad.append(f"JS错误: {errs[:2]}")
             if (nojs or rm) and vis['hidden']: bad.append(f"不可见元素 {vis}")
             if (nojs and vis['js']) : bad.append("no-JS 却带 js 类")

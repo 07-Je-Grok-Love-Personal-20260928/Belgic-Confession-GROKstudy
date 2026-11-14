@@ -102,4 +102,4 @@ def part_compare():
     b += c_viz.viz_overview()
     import c_refx
     b += c_refx.l2("compare")
-    return L1("compare","五","三份文件比较、签署与接受","scale","体裁、问题、相互关系，以及签署书与三大信经的接受。", b)
+    return L1("compare","六","三份文件比较、签署与接受","scale","体裁、问题、相互关系，以及签署书与三大信经的接受。", b)

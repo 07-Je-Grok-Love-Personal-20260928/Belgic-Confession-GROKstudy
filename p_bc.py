@@ -89,4 +89,4 @@ def part_bc():
         x=f'<div class="gintro reveal" style="--c:{col}"><p class="g1">{one}</p><p>{intro}</p></div>'+hard(hd)
         for n in range(lo,hi+1): x+=art(n,col,lab)
         b+=L2(f"bx-{g}","3.x",f"{lab}（第{lo}–{hi}条）",x)
-    return L1("bc","三","三十七条逐条深读","scroll","每一条：真实处境、原文要义（CCI 逐字）、圣经神学、圣约神学、对手、互参、重点难点、应用与记忆钩。",b)
+    return L1("bc","四","三十七条逐条深读","scroll","每一条：真实处境、原文要义（CCI 逐字）、圣经神学、圣约神学、对手、互参、重点难点、应用与记忆钩。",b)

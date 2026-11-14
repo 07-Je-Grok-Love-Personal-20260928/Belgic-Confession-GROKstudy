@@ -9,16 +9,16 @@ import c_compare,c_west,c_src,libs
 import v2, p_bible,p_hist,p_bc,p_topics,p_mem, maps
 
 SITE="比利时信条 · 欧陆改革宗深读"
-PAGES=[("index","index.html","首页","home"),("bible","bible.html","一 全本圣经与圣约","book"),("hist","hist.html","二 历史·地理·文化","map"),("atlas","atlas.html","二续 地图集","map"),("bc","bc.html","三 37条逐条深读","scroll"),
- ("topics","topics.html","四 专题深析","brain"),("compare","compare.html","五 三项联合信条比较","link"),("westminster","westminster.html","六 威斯敏斯特对照","scale"),
- ("bct","bct.html","七 BC 原文·背诵","scroll"),("hct","hct.html","八 HC 原文·背诵","scroll"),("dtt","dtt.html","九 Dort 原文·背诵","scroll"),("creedsx","creedsx.html","十 三大信经","scroll"),
- ("memory","memory.html","十一 记忆自测","brain"),("sources","sources.html","十二 来源","library")]
+PAGES=[("index","index.html","首页","home"),("bible","bible.html","一 全本圣经与圣约","book"),("hist","hist.html","二 历史·地理·文化","map"),("atlas","atlas.html","三 地图集","map"),("bc","bc.html","四 37条逐条深读","scroll"),
+ ("topics","topics.html","五 专题深析","brain"),("compare","compare.html","六 三项联合信条比较","link"),("westminster","westminster.html","七 威斯敏斯特对照","scale"),
+ ("bct","bct.html","八 BC 原文·背诵","scroll"),("hct","hct.html","九 HC 原文·背诵","scroll"),("dtt","dtt.html","十 Dort 原文·背诵","scroll"),("creedsx","creedsx.html","十一 三大信经","scroll"),
+ ("memory","memory.html","十二 记忆自测","brain"),("sources","sources.html","十三 来源","library")]
 if "home" not in P: P["home"]=P["book"]
 PARTS={"bible":p_bible.part_bible,"hist":p_hist.part_hist,"atlas":maps.part_atlas,"bc":p_bc.part_bc,"topics":p_topics.part_topics,"compare":c_compare.part_compare,"westminster":c_west.part_westminster,
  "hct":libs.part_hct,"bct":libs.part_bct,"dtt":libs.part_dtt,"creedsx":libs.part_creedsx,"memory":p_mem.part_memory}
 FILE={k:f for k,f,_,_ in PAGES}; LABEL={k:t for k,_,t,_ in PAGES}
 BODY={}
-L1N={"bible":1,"hist":2,"atlas":"2续","bc":3,"topics":4,"compare":5,"westminster":6,"bct":7,"hct":8,"dtt":9,"creedsx":10,"memory":11,"sources":12}
+L1N={"bible":1,"hist":2,"atlas":3,"bc":4,"topics":5,"compare":6,"westminster":7,"bct":8,"hct":9,"dtt":10,"creedsx":11,"memory":12,"sources":13}
 for k,_,_,_ in PAGES[1:]:
     core.CUR["f"]=FILE[k]; core.CUR["n"]=L1N[k]; core.CUR["c2"]=0
     if k=="sources": BODY[k]=c_src.part_src(BODY)
@@ -37,17 +37,8 @@ def rewrite(k,h):
         UNRES.append((k,i)); return m.group(0)
     return re.sub(r'href="#([^"]*)"',f,h)
 def toc_html(cur):
-    t='<nav id="toc" aria-label="目录"><div class="tochead"><b>目录</b><button id="tocx" class="btn ghost" aria-label="隐藏目录" type="button">✕</button></div>'
-    t+='<a class="tochome'+(' on' if cur=="index" else '')+'" href="index.html">🏠 首页 · 学习路径与进度</a><ol>'
-    for id,title,subs,f in TOC:
-        page=[k for k,ff in FILE.items() if ff==f][0]
-        def sub(s):
-            sid,st,kids=s
-            if not kids: return f'<li class="t2"><a href="{f}#{sid}">{st}</a></li>'
-            return (f'<li class="t2 has closed"><div class="t2r"><a href="{f}#{sid}">{st}</a><button class="tg2" type="button" aria-label="展开或收起三级标题" aria-expanded="false">▾</button></div><ol>'
-                    +"".join(f'<li class="t3"><a href="{f}#{i}">{tt}</a></li>' for i,tt in kids)+"</ol></li>")
-        t+=f'<li class="t1{" cur" if page==cur else " closed"}" data-page="{page}"><div class="t1r"><a href="{f}#{id}">{title}</a><button class="tg" type="button" aria-label="展开或收起" aria-expanded="{"true" if page==cur else "false"}">▾</button></div><ol>'+"".join(sub(s) for s in subs)+"</ol></li>"
-    return t+"</ol></nav>"
+    import t87, v4
+    return v4.toc_html(TOC, FILE, cur, t87.emo)
 def tabs(cur):
     return '<nav class="ptabs" aria-label="页面导航">'+"".join(f'<a href="{f}"{" class=on aria-current=page" if k==cur else ""}>{t}</a>' for k,f,t,_ in PAGES)+'</nav>'
 def pager(cur):
@@ -70,8 +61,8 @@ def page(cur,body):
     n={k:len(re.findall(r'<section class="l2',h)) for k,h in BODY.items()}
     title=LABEL[cur]+" · "+SITE if cur!="index" else "比利时信条 · 欧陆改革宗深读（Belgic Confession GROKstudy）"
     desc=DESC.get(cur) or re.sub(r'<[^>]+>','',re.search(r'<p class="lead">(.*?)</p>',body).group(1))+" "+SITE+"。"
-    return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title} {V}</title><meta name="description" content="{H.escape(desc[:150])}"><meta name="theme-color" content="#070d22"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><script>try{{var de=document.documentElement;de.classList.add("jsok");if(localStorage.getItem("mk.off")==="1")de.classList.add("mkoff");var s=de.style,a=+localStorage.getItem("tfu1.tw"),m=+localStorage.getItem("tfu1.twm"),w=innerWidth;if(a>=220&&a<=Math.min(680,w*.6))s.setProperty("--tw",a+"px");if(m>=240&&m<=Math.min(560,w*.94))s.setProperty("--twm",m+"px")}}catch(e){{}}</script><link rel="stylesheet" href="assets/styles.css?v={V}"><link rel="stylesheet" href="assets/bc.css?v={V}">{extra_css(cur,body)}</head><body data-page="{cur}" data-total="{n.get(cur,0)}">
-<div id="prog"></div>{toc_html(cur)}<div id="tocgrip" role="separator" aria-orientation="vertical" aria-label="拖动调整目录宽度（左右方向键微调，双击还原）" title="拖动调整目录宽度；双击还原" tabindex="0"></div><button id="tocbtn" class="fab" aria-label="显示目录" aria-controls="toc" type="button">☰ 目录</button>
+    return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title} {V}</title><meta name="description" content="{H.escape(desc[:150])}"><meta name="theme-color" content="#070d22"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><script>try{{var de=document.documentElement;de.classList.add("jsok");if(localStorage.getItem("mk.off")==="1")de.classList.add("mkoff");var s=de.style,ls=localStorage,w=innerWidth,a=+ls.getItem("tk4.w"),m=+ls.getItem("tk4.wm");if(a>=240&&a<=Math.max(240,Math.min(760,w-420)))s.setProperty("--tkw",a+"px");if(m>=260&&m<=w-12)s.setProperty("--tkwm",m+"px");if(ls.getItem("tk4.hide")==="1")de.classList.add("tk-hide")}}catch(e){{}}</script><link rel="stylesheet" href="assets/styles.css?v={V}"><link rel="stylesheet" href="assets/bc.css?v={V}">{extra_css(cur,body)}</head><body data-page="{cur}" data-total="{n.get(cur,0)}">
+<div id="prog"></div>{toc_html(cur)}<button id="tocbtn" class="fab" aria-label="显示目录" aria-controls="toc" type="button">☰ 目录</button>
 <main id="main">{tabs(cur)}{'' if cur=='index' else f'<p class="readchip">本页已读 <b id="pgread">0</b> / {n.get(cur,0)} 个小节</p>'}{'<div class="secbar"><b>🎯 阅读建议</b><span>先读彩色标记；“辅助”区块默认折叠。</span><button class="btn ghost" type="button" data-secall="open">展开全部辅助</button><button class="btn ghost" type="button" data-secall="close">收起全部辅助</button></div>' if 'class="secd"' in body else ''}{body}{pager(cur)}<footer class="foot"><p>{SITE} · <b>{V}</b></p><p>以圣经为最高权威；信条与信经为从属标准。三项联合信条与三大信经原文取自 <a href="https://ccifellowship.org/books/book-of-praise" target="_blank" rel="noopener">CCI《赞美手册》中文版</a>。姊妹站：<a href="{CREEDS_SITE}" target="_blank" rel="noopener">三大公教会信经 · 欧陆改革宗深读</a>。</p></footer></main>
 <script>window.TEC={json.dumps({"v":V,"pages":[{"k":k,"f":f,"t":t,"n":n.get(k,0)} for k,f,t,_ in PAGES[1:]]},ensure_ascii=False)}</script>
 <script src="assets/app.js?v={V}" defer></script><script src="assets/bc.js?v={V}" defer></script>{extra_js(cur,body)}</body></html>'''
@@ -114,6 +105,8 @@ for k,f,_,_ in PAGES:
     out,_ny=t87.extras(out,k,"tfu")
     out=re.sub(r'(<pre class="mermaid">)(.*?)(</pre>)',lambda m:m.group(1)+re.sub(r'<(?!br/?>)[^>]+>','',m.group(2))+m.group(3),out,flags=re.S)
     out=v2.post(out,k)
+    import v4
+    out=v4.shift_headings(v4.remap_refs(out),index=(k=="index"))
     open(f,"w",encoding="utf-8").write(out)
 trim.check()
 print('bundle',v2.bundle())

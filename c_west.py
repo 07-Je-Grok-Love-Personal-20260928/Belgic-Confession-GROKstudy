@@ -134,4 +134,4 @@ def part_westminster():
       + note("WCF、WLC、WSC 的检索说明：本站另检索了 OPC 所载三份英文文本，没有“creed”一词；因此“是否点名三信经”是文本事实，不是对该传统立场的结论。"))
     import c_refx
     b += c_refx.l2("west")
-    return L1("westminster","六","与威斯敏斯特标准对照（次要比较）","scale","圣经、预定、圣约、确信、教会、圣礼、安息日、政府：同一信仰在两个传统里的表述。", b)
+    return L1("westminster","七","与威斯敏斯特标准对照（次要比较）","scale","圣经、预定、圣约、确信、教会、圣礼、安息日、政府：同一信仰在两个传统里的表述。", b)

@@ -57,7 +57,7 @@ def part_bct():
         for a in D["articles"][lo-1:hi]:
             x+=L3(f'bc-{a["n"]}',H.escape(a["title"]),blocks_html(a["blocks"])+f'<p class="src">{src_link(a["url"])}</p>',"scroll",cls="art tx")
         b += L2(gid,num,gt,x)
-    return L1("bct","七","比利时信条全文（37条）","scroll","德布利（Guido de Brès）所著；CCI 中文版逐字收录。", b)
+    return L1("bct","八","比利时信条全文（37条）","scroll","德布利（Guido de Brès）所著；CCI 中文版逐字收录。", b)
 
 # ===== 九、海德堡 =====
 def part_hct():
@@ -88,7 +88,7 @@ def part_hct():
             x+=L3(f'ld{n}',f"主日{n} · {HC52[n][0]}",blocks_html(ld["blocks"])+f'<p class="src">{src_link(ld["url"])} · {src_link(CCI+"/books/i-belong/"+ibref(n),"CCI《我属于》学习课程")}</p>',HC52[n][3],sub=f"问{rng[n][0]}–{rng[n][1]}",cls="art tx ld")
         b += L2(gid,num,gt,x)
     b += note("<b>分组说明：</b>“第一部/第二部/第三部”及“子神和我们的得赎”“圣灵神和我们的成圣”“我们得称为义”“圣言与圣礼”“圣洗礼”“圣餐”“十诫”“祷告”等标题均为 CCI 页面的目录名；“主日5–10”一组 CCI 未另立标题，本站按其内容（中保、信心、使徒信经、三一、创造与护理）命名。")
-    return L1("hct","八","海德堡要理问答全文（129问）","scroll","乌尔西努与俄利维亚努（1563）；CCI 中文版逐字收录，含 52 主日。", b)
+    return L1("hct","九","海德堡要理问答全文（129问）","scroll","乌尔西努与俄利维亚努（1563）；CCI 中文版逐字收录，含 52 主日。", b)
 
 # ===== 十、多特 =====
 def part_dtt():
@@ -108,7 +108,7 @@ def part_dtt():
             lab = "驳" if err else str(it["n"])
             x+=L3(f'dort-{h["id"]}-{it["n"]}',H.escape(it["title"]),blocks_html(it["blocks"])+f'<p class="src">{src_link(it["url"])}</p>',"alert" if err else "scroll",cls="art tx"+(" err" if err else ""))
         b += L2(f"dt-{h['id']}",num,h["title"]+f'（项{h["num"]}）',x+f'<p class="src">{src_link(h["url"],"CCI 本项总页")}</p>')
-    return L1("dtt","九","多特信经全文（四项教义）","scroll","1618–1619 多特大会；CCI 中文版逐字收录，含正反两面（教义与错谬反驳）。", b)
+    return L1("dtt","十","多特信经全文（四项教义）","scroll","1618–1619 多特大会；CCI 中文版逐字收录，含正反两面（教义与错谬反驳）。", b)
 # ===== 十、三大信经原文（附录）：背诵版 + CCI 整段原文 =====
 import creedlib as CL
 def _rc(inner): return f'<div class="rc" data-recite>{inner}</div>'
@@ -158,4 +158,4 @@ def part_creedsx():
       L3("cr-sm-ap","使徒信经：洗礼的信经",SM.block("ap"),"dove")+L3("cr-sm-ni","尼西亚信经：会议的信经",SM.block("ni"),"flame")+L3("cr-sm-at","亚他那修信经：教学的信经",SM.block("at"),"shield"))
     import c_refx
     b += c_refx.l2("creedsx")
-    return L1("creedsx","十","附录：三大信经原文与背诵版（CCI）","scroll","CCI《赞美手册》中文版逐字收录；背诵版一行一句；逐句讲解见姊妹站。", b)
+    return L1("creedsx","十一","附录：三大信经原文与背诵版（CCI）","scroll","CCI《赞美手册》中文版逐字收录；背诵版一行一句；逐句讲解见姊妹站。", b)

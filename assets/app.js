@@ -5,22 +5,16 @@ function ld(k,def){try{var v=JSON.parse(localStorage.getItem(k));return v==null?
 function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 /* reveal */ /* v8 perf */
 if(!rm&&'IntersectionObserver'in window){d.documentElement.classList.add('js');var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});$$('.reveal').forEach(function(el){io.observe(el)})}
-/* toc */
+/* toc：v4 见 toc4.js */
 var wide=function(){return innerWidth>=1100};
-function tog(){if(wide())b.classList.toggle('tochide');else b.classList.toggle('tocopen')}
-var tb=$('#tocbtn'),tx=$('#tocx');if(tb)tb.onclick=tog;if(tx)tx.onclick=tog;
-$$('#toc a').forEach(function(a){a.addEventListener('click',function(){if(!wide())b.classList.remove('tocopen')})});
-$$('.tg').forEach(function(t){t.onclick=function(){var li=t.closest('.t1');li.classList.toggle('closed');t.setAttribute('aria-expanded',!li.classList.contains('closed'))}});
-$$('#toc .t1').forEach(function(li){if(!li.classList.contains('cur')){li.classList.add('closed');var g=$('.tg',li);if(g)g.setAttribute('aria-expanded','false')}});
-$$('.tg2').forEach(function(t){t.onclick=function(){var li=t.closest('.t2');li.classList.toggle('closed');t.setAttribute('aria-expanded',!li.classList.contains('closed'))}});
-var links={};$$('#toc .t1.cur a').forEach(function(a){var h=a.getAttribute('href');links[h.split('#')[1]]=a});
+var links={};$$('#toc .tk1.is-cur a[data-s]').forEach(function(a){links[a.getAttribute('data-s')]=a});
 var secs=$$('section.l1[id],section.l2[id],section.l3[id]');
 var rd=ld(KEY,{}),mine=rd[PG]||[];
 function markRead(id){if(mine.indexOf(id)<0){mine.push(id);rd[PG]=mine;sv(KEY,rd);var a=links[id];if(a)a.classList.add('done');upd()}}
 function upd(){var c=$('#pgread');if(c)c.textContent=mine.length}
 mine.forEach(function(id){var a=links[id];if(a)a.classList.add('done')});
 var cur=null,band=new Set(),order=new Map();secs.forEach(function(x,i){order.set(x,i)});
-function setAct(id){if(id===cur)return;$$('#toc a.on').forEach(function(a){a.classList.remove('on')});var a=links[id];if(a){a.classList.add('on');/* t88：滚动时不再自动展开/收起目录分组（消除目录内的布局位移），只高亮可见的上级 */$$('#toc .onp').forEach(function(x){x.classList.remove('onp')});var vis=a,t2=a.closest('.t2.has');if(t2&&t2.classList.contains('closed')){var pa=$('.t2r>a',t2);if(pa){pa.classList.add('onp');vis=pa}}var l1=a.closest('.t1');if(l1&&l1.classList.contains('closed')){var pb=$('.t1r>a',l1);if(pb){pb.classList.add('onp');vis=pb}}a=vis;if(wide()&&!b.classList.contains('tochide')){var t=$('#toc');requestAnimationFrame(function(){var r2=a.getBoundingClientRect();if(r2.top<60||r2.bottom>innerHeight-40)t.scrollTop+=r2.top-innerHeight/2})}}cur=id}
+function setAct(id){if(id===cur)return;if(window.TK)TK.act(id);cur=id}
 if('IntersectionObserver'in window){
  var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});var best=null,bi=-1;band.forEach(function(x){var i=order.get(x);if(i>bi){bi=i;best=x}});if(best)setAct(best.id)},{rootMargin:'0px 0px -75% 0px'});
  var ioR=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){markRead(e.target.id);ioR.unobserve(e.target)}})},{rootMargin:'0px 0px -40% 0px'});
@@ -30,26 +24,6 @@ if('ResizeObserver'in window)new ResizeObserver(function(){measure();prog()}).ob
 var SDA=!rm&&window.CSS&&CSS.supports&&CSS.supports('animation-timeline: scroll()');function prog(){if(SDA)return;if(p)p.style.transform='scaleX('+Math.min(1,scrollY/H).toFixed(4)+')'}
 var tk=0;addEventListener('scroll',function(){if(!tk){tk=1;requestAnimationFrame(function(){prog();tk=0})}},{passive:true});prog();upd();
 
-/* toc resize */
-(function(){var g=$('#tocgrip'),toc=$('#toc');if(!g||!toc)return;var root=d.documentElement,KD='tfu1.tw',KM='tfu1.twm',sx=0,sw=0,dragging=false;
-function lim(){return wide()?[220,Math.min(680,Math.round(innerWidth*.6))]:[240,Math.min(560,Math.round(innerWidth*.94))]}
-function dflt(){return wide()?300:Math.min(330,Math.round(innerWidth*.86))}
-function cl(v){var l=lim();return Math.max(l[0],Math.min(l[1],Math.round(v)))}
-function aria(v){var l=lim();g.setAttribute('aria-valuemin',l[0]);g.setAttribute('aria-valuemax',l[1]);g.setAttribute('aria-valuenow',v)}
-function cur(){return Math.round(toc.getBoundingClientRect().width)}
-function set(v,save){v=cl(v);root.style.setProperty(wide()?'--tw':'--twm',v+'px');aria(v);if(save)sv(wide()?KD:KM,v);return v}
-function reset(){root.style.removeProperty(wide()?'--tw':'--twm');try{localStorage.removeItem(wide()?KD:KM)}catch(e){}aria(cur())}
-aria(cur());
-g.addEventListener('pointerdown',function(e){if(e.button>0)return;dragging=true;sx=e.clientX;sw=cur();try{g.setPointerCapture(e.pointerId)}catch(x){}b.classList.add('tocdrag');e.preventDefault()});
-g.addEventListener('pointermove',function(e){if(!dragging)return;set(sw+e.clientX-sx,false)});
-function end(e){if(!dragging)return;dragging=false;b.classList.remove('tocdrag');set(cur(),true);try{g.releasePointerCapture(e.pointerId)}catch(x){}}
-g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);
-g.addEventListener('dblclick',reset);
-g.addEventListener('keydown',function(e){var st=e.shiftKey?64:16,v=cur(),l=lim();
- if(e.key==='ArrowLeft'||e.key==='ArrowDown')v-=st;else if(e.key==='ArrowRight'||e.key==='ArrowUp')v+=st;else if(e.key==='Home')v=l[0];else if(e.key==='End')v=l[1];else if(e.key==='Enter'||e.key==='Escape'){reset();return}else return;
- e.preventDefault();set(v,true)});
-addEventListener('resize',function(){var v=cur(),c=cl(v);if(c!==v)set(c,false);else aria(v)});
-})();
 /* counters */
 var cs=$$('[data-count]');if(!rm&&cs.length){cs.forEach(function(c){var n=+c.dataset.count,t0=null;c.textContent='0';function st(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1400);c.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(st);else c.textContent=n}requestAnimationFrame(st);setTimeout(function(){c.textContent=n},2500)})}
 /* tabs: scroll active into view */
