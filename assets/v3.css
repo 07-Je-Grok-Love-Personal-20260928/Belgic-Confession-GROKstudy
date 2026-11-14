@@ -1,7 +1,7 @@
 /* v3：地图对、示意动画、更清晰的笔记标记、更便宜的绘制 */
 .mapduo{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin:18px 0;min-width:0}
-@media(min-width:1100px){.mapduo:not(.wide){grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}}
-.sche,.livemap{margin:0;min-width:0;padding:0;border-radius:16px;border:1px solid rgba(var(--W),.12);background:rgba(var(--W),.04);overflow:hidden}
+@media(min-width:1100px){.mapduo:not(.wide){grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
+.sche,.livemap{margin:0;min-width:0;padding:0;border-radius:16px;border:1px solid rgba(var(--W),.12);background:rgba(var(--W),.04);overflow:hidden;align-self:start}
 .sche{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .sche svg{width:100%;height:auto;display:block;min-width:0}
 @media(max-width:700px){.sche svg{min-width:640px}}
@@ -56,7 +56,7 @@
 /* 性能：降低大面积阴影与 hover 合成成本 */
 .card,.fc,.act,.vcard{box-shadow:0 6px 18px rgba(0,0,0,.16);transition:transform .2s ease}
 .card:hover,.fc:hover,.act:hover,.vcard:hover{transform:translate3d(0,-3px,0)}
-.l3,.ldc{content-visibility:auto;contain-intrinsic-size:auto 900px;contain:content}
+.l3,.ldc{content-visibility:auto;contain-intrinsic-size:auto 900px}
 .livebox,.leaflet-container{content-visibility:visible!important}
 #toc{will-change:auto}
 /* 主题切换时不要让所有卡片一起过渡颜色 */
@@ -65,3 +65,4 @@ html.thx *{transition:none!important}
   .boat,.sch .dash,.sch .pulse circle,.sch .pulse.chip rect,.sch .glow,body::after{animation:none!important}
   .card:hover,.fc:hover,.act:hover,.vcard:hover{transform:none}
 }
+html.thx body::after,html.thx .sch .dash,html.thx .boat,html.thx .pulse{animation:none!important}

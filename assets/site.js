@@ -278,8 +278,11 @@ function watch(){
   if(!els.length)return;
   var go=function(el){loadLib(function(){boot(el)})};
   if(!('IntersectionObserver' in window)){els.forEach(go);return}
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);go(e.target)}})},{rootMargin:'700px'});
-  els.forEach(function(el){io.observe(el.closest('.mapduo,.livemap,section.l2')||el)});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);
+    var boxes=e.target.classList.contains('livebox')?[e.target]:e.target.querySelectorAll('.livebox');
+    boxes.forEach(go);
+  }})},{rootMargin:'1200px'});
+  els.forEach(function(el){io.observe(el.closest('section.l2')||el.closest('.mapduo')||el)});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watch);else watch();
 })();

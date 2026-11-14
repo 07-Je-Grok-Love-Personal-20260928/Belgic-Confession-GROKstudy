@@ -2,9 +2,9 @@
 用法：python3 tools/qa.py [--shots] [--nojs] [--rm] [页面...]  （file:// 打开）"""
 import sys,os,glob,json
 from playwright.sync_api import sync_playwright
-args=sys.argv[1:]; shots='--shots' in args; nojs='--nojs' in args; rm='--rm' in args; opn='--open' in args
+args=sys.argv[1:]; shots='--shots' in args; nojs='--nojs' in args; rm='--rm' in args; opn='--open' in args; offt='--offline-tiles' in args; tocopen='--toc' in args
 pages=[a for a in args if a.endswith('.html')] or sorted(glob.glob('*.html'))
-W=[360,390,768,1280,1440]
+W=[int(x) for x in os.environ['W'].split(',')] if os.environ.get('W') else [320,360,390,414,768,1024,1280,1440,1920]
 JS_OVER='''()=>{
  const vw=document.documentElement.clientWidth, out=[];
  const sc=(el)=>{for(let p=el;p&&p!==document.body;p=p.parentElement){const o=getComputedStyle(p).overflowX; if((o==='auto'||o==='scroll')&&p.scrollWidth>p.clientWidth) return true;} return false};
@@ -29,9 +29,13 @@ with sync_playwright() as p:
         for w in W:
             ctx=b.new_context(viewport={'width':w,'height':900},java_script_enabled=not nojs,reduced_motion='reduce' if rm else 'no-preference')
             if os.environ.get('THEME'): ctx.add_init_script("try{localStorage.setItem('ui.theme','%s')}catch(e){}"%os.environ['THEME'])
+            if offt:
+                ctx.route('**/*', lambda route: route.abort() if any(x in route.request.url for x in ('tile.openstreetmap','basemaps.cartocdn','arcgisonline','opentopomap','openstreetmap.fr','openstreetmap.de','autonavi','webrd')) else route.continue_())
             pg=ctx.new_page(); errs=[]
             pg.on('pageerror',lambda e:errs.append(str(e))); pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
-            pg.goto('file://'+os.path.abspath(f)); pg.wait_for_timeout(300); pg.evaluate("s=>{const e=document.createElement('style');e.textContent=s;document.head.appendChild(e)}",'*{content-visibility:visible!important}')  # v8：测量时强制渲染 content-visibility:auto 的区块
+            pg.goto('file://'+os.path.abspath(f)); pg.wait_for_timeout(300);
+            if tocopen: pg.evaluate("document.getElementById('tocbtn')?.click();document.getElementById('toc')?.classList.add('open');document.body.classList.add('toc-open')")
+            pg.evaluate("s=>{const e=document.createElement('style');e.textContent=s;document.head.appendChild(e)}",'*{content-visibility:visible!important}')  # v8：测量时强制渲染 content-visibility:auto 的区块
             if opn: pg.evaluate("document.querySelectorAll('details').forEach(e=>e.open=true)")
             if not nojs:
                 # 滚动一遍以触发 reveal / 进度
