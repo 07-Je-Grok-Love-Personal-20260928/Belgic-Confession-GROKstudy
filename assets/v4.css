@@ -121,7 +121,7 @@ body[data-page=memory]{--ph:120}
 body[data-page=sources]{--ph:30}
 .tk1>.tk-row>a .tk-n{background:linear-gradient(135deg,hsl(var(--ph,45) 64% 30%),hsl(calc(var(--ph,45) + 28) 64% 24%));color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.35);box-shadow:0 2px 8px hsl(var(--ph,45) 60% 30% / .35)}
 .tk1.is-cur>.tk-row>a .tk-n{box-shadow:0 0 0 2px hsl(var(--ph,45) 70% 60% / .7),0 2px 10px hsl(var(--ph,45) 60% 30% / .45)}
-body[data-page] main h1{background-image:linear-gradient(90deg,hsl(var(--ph,45) 70% 55%),hsl(calc(var(--ph,45) + 40) 70% 55%) 40%,transparent 70%);background-size:100% 3px;background-repeat:no-repeat;background-position:0 100%;padding-bottom:.25em}
+body[data-page] main h1:not(.hero h1){background-image:linear-gradient(90deg,hsl(var(--ph,45) 70% 55%),hsl(calc(var(--ph,45) + 40) 70% 55%) 40%,transparent 70%);background-size:100% 3px;background-repeat:no-repeat;background-position:0 100%;padding-bottom:.25em}
 /* v4 重点标记：荧光笔“划过”动画（随区块进入视口；减少动态时直接显示） */
 @media (prefers-reduced-motion:no-preference){
  html.js .reveal:not(.in) .mk-hl,html.js .reveal:not(.in) .mk-core{background-size:0% 100%!important}
@@ -138,3 +138,4 @@ html:is([data-theme=dawn],[data-theme=parch]) #toc .tk-row>a.on .tk-t,html:is([d
 .grid.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
 .grid.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
 .grid.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.hero h1 span{display:block;letter-spacing:.1em;text-wrap:balance;margin-top:.35em;line-height:1.35}
