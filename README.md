@@ -1,26 +1,42 @@
-# belgic-confession-20261114-v3-GROKstudy
+# belgic-confession-20261114-v4-GROKstudy
 
-**《比利时信条》（Belgic Confession, 1561）· 欧陆改革宗深读**：简体中文多页学习站，页脚版本号为 `v20261114-3.1`（v3.1.0）。
+**《比利时信条》（Belgic Confession, 1561）· 欧陆改革宗深读**：简体中文多页学习站，页脚版本号为 `v20261114-4`（v4.0.0）。
 
 站点从整本圣经与圣约的大图景讲起，然后讲历史、地理与文化（并配地图集），再把 37 条逐条展开。之后是专题深析、三项联合信条比较、威斯敏斯特对照，以及 BC / HC / Dort 与三大信经的原文背诵版、记忆自测。
 
 > **引文规则**：全站信条原文和中文引号内的引文，都逐字取自 [CCI《赞美手册》中文版](https://ccifellowship.org/books/book-of-praise)。构建时由程序做子串核对（`core.Q`、`tools/verify_exact.py`），核对不过就不能构建。CCI 没有的内容，用用户提供的《中国改革宗教会敬拜手册》2015 版逐字摘引，并标明页码。
 
-## 在线地址（当前 v3.1.0）
+## 在线地址（当前 v4.0.0）
 
 | 部署 | 地址 |
 |---|---|
 | GitHub Pages | https://07-je-grok-love-personal-20260928.github.io/Belgic-Confession-GROKstudy/ |
-| Surge | https://belgic-confession-20261114-v3-grokstudy.surge.sh/ |
-| Netlify | https://belgic-confession-20261114-v3-grokstudy.netlify.app/ |
+| Surge | https://belgic-confession-20261114-v4-grokstudy.surge.sh/ |
+| Netlify | https://belgic-confession-20261114-v4-grokstudy.netlify.app/ |
 | 代码仓库 | https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy |
 
 较早版本仍保留为还原点：
 
+- v3.1.0：[标签](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v3.1.0) · https://belgic-confession-20261114-v3-grokstudy.surge.sh/ · https://belgic-confession-20261114-v3-grokstudy.netlify.app/
+- v3.0.0：[标签](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v3.0.0) · 地址与 v3.1.0 相同
 - v2.0.0：[标签](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v2.0.0) · https://belgic-confession-20261023-v2-grokstudy.surge.sh/ · https://belgic-confession-20261023-v2-grokstudy.netlify.app/
 - v1.0.0：[标签](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v1.0.0) · https://belgic-confession-20261023-v1-grokstudy.surge.sh/ · https://belgic-confession-20261023-v1-grokstudy.netlify.app/
 
 命名规则：仓库名只用主题（`Belgic-Confession-GROKstudy`）；Surge / Netlify 的域名用“主题-日期-版本-grokstudy”。
+
+## v4.0.0 说明（2026-11-14 16:58，台北时间）
+
+**1. 目录。** 重做为可折叠的一、二、三级目录：各级带序号（1、1.1、1.1.1），长标题完整换行、不被截断。电脑上拖动目录右缘金色手柄可左右调宽（240–760px，双击复位，方向键 / Home / End 也可调），宽度和展开状态都会记住。滚动时高亮当前章节并自动滚入可视区。手机上是抽屉式目录，宽度单独记忆；点遮罩或 Esc 关闭，点条目后自动收起。目录可隐藏，也可搜索过滤。
+
+**2. 结构。** 全站标题与目录对齐，重编为 1–13 部分（地图集成为第三部分，其后各部分顺延）。一级、二级、三级标题对应 h1 / h2 / h3。
+
+**3. 地图、历史、文化。** 在原有七组成对地图之外，新增三组：八十年战争、印刷与诗篇传播网络、三城对照。现在一共十组，每组仍是「不联网也能看的示意图 + 可切换的多源实时底图」。宽屏并排、窄于 1600px 时上下叠放，保证示意图可读。底图源与自动回退策略与 v3 相同。
+
+**4. 内容与笔记标记。** 专题页新增「多角度解读」（5.9）。重点标记增加悬停说明；目录徽章与部分标题带分群色相，方便记忆。提示框只让标签做成色块，正文里的加粗词保持行内，避免打断阅读。记忆页的图标砖在手机上改为两列、字号可读。
+
+**5. 流畅度。** 目录「全部展开」分段进行；锚点跳转和滚动高亮会等待 `content-visibility` 尚未绘制的区块。Leaflet 等样式加载后再初始化地图。手机模拟（390 宽、4 倍 CPU 降速）下，滚动、目录拖宽、地图平移、展开折叠项都接近 60 fps，与 v3.1 同级；因三级目录条目更多，「全部展开/收起」略慢于 v3.1，最长帧约 67–83 ms。主题连切仍是最费力的操作，单次点击在普通手机上只是一两帧。
+
+**6. 质量检查（全部 0 失败）。** 9 种宽度（320–1920）× 14 页 × 6 种主题，全部展开，目录分别在最窄和最宽两种宽度下各测一遍；点击测试跑两遍（目录、六种主题、全部折叠项、五个底图来源、屏蔽时自动回退）；目录拖宽/折叠/搜索/抽屉测试 374 项两轮 0 失败；离线流程图、底图屏蔽、示意图标签重叠 0；站内链接 6097 个 0 坏链；原文逐字 513 段 0 缺失，并与 ccifellowship.org 现场 155 页核对一致；背诵版逐行核对通过；六套主题下目录当前项对比度 ≥ 4.5:1。锚点落点 64 次全部对准；背诵页 3 处分组标题的滚动高亮会落在该组的第一条上，不影响跳转位置。
 
 ## v3.1.0 说明（2026-11-14 13:10，台北时间）
 
@@ -88,11 +104,11 @@ hct 桌面那一次偏差较大；随后在同一负载下交替各测两次，�
 | 首页 | `index.html` | 学习路径与进度、可视化入口 |
 | 一 | `bible.html` | 全本圣经与圣约；三个读法视角 |
 | 二 | `hist.html` | 故事线、时间线、文化、人物、狱中书信；足迹成对地图 |
-| 二续 | `atlas.html` | 七张成对地图（示意图 + 多源实时底图） |
-| 三 | `bc.html` | 37 条逐条深读 |
-| 四–六 | `topics.html` / `compare.html` / `westminster.html` | 专题、三项联合信条比较、威斯敏斯特对照 |
-| 七–十 | `bct.html` / `hct.html` / `dtt.html` / `creedsx.html` | 原文背诵版 |
-| 十一–十二 | `memory.html` / `sources.html` | 记忆自测、来源 |
+| 三 | `atlas.html` | 十张成对地图（示意图 + 多源实时底图） |
+| 四 | `bc.html` | 37 条逐条深读 |
+| 五–七 | `topics.html` / `compare.html` / `westminster.html` | 专题（含多角度解读）、三项联合信条比较、威斯敏斯特对照 |
+| 八–十一 | `bct.html` / `hct.html` / `dtt.html` / `creedsx.html` | 原文背诵版 |
+| 十二–十三 | `memory.html` / `sources.html` | 记忆自测、来源 |
 
 六种主题（🌌 夜空、🌅 晨曦、🌲 森林、🌊 海洋、🍇 葡萄、📜 羊皮纸）点击切换，保存在本地。
 
@@ -111,19 +127,23 @@ hct 桌面那一次偏差较大；随后在同一负载下交替各测两次，�
 python3 build.py              # 生成全部 .html（引文不符即中止）
 python3 tools/check_links.py  # 站内锚点
 python3 tools/verify_exact.py # 原文逐字核对
-python3 tools/qa.py           # 默认宽度 320/360/390/414/768/1024/1280/1440/1920
-THEME=dawn python3 tools/qa.py --open --toc
+python3 tools/verify_live.py  # 对照 ccifellowship.org 现场原文
+THEME=dawn TOCW=min python3 tools/qa.py --open --toc   # 9 宽 × 全部展开 × 目录最窄
+THEME=dawn TOCW=max python3 tools/qa.py --open --toc   # 同上，目录最宽
 python3 tools/qa.py --offline-tiles atlas.html hist.html
 python3 tools/qa_click.py       # 点击交互 + 底图切换/回退
+PASSES=2 python3 tools/qa_toc4.py  # 目录拖宽、折叠、搜索、抽屉
 python3 tools/qa_mermaid.py     # 屏蔽外网时流程图渲染
-python3 tools/svg_overlap.py atlas.html hist.html  # 示意图标签重叠
-OUT=perf.json python3 tools/perf3.py . index.html atlas.html  # 交互帧率
+python3 tools/svg_overlap.py    # 示意图标签重叠
+python3 tools/toc_contrast.py   # 六主题目录对比度
+OUT=perf.json python3 tools/perf4.py . index.html atlas.html  # v4 交互帧率
 ```
 
 ## 版本记录
 
 | 版本 | 日期（台北时间） | 说明 |
 |---|---|---|
+| v4.0.0 | 2026-11-14 16:58 | 三级可拖宽目录；全站 1–13 部分对齐；三组新地图（共十组）；多角度解读与标记优化。地址：[Pages](https://07-je-grok-love-personal-20260928.github.io/Belgic-Confession-GROKstudy/) · [Surge](https://belgic-confession-20261114-v4-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261114-v4-grokstudy.netlify.app/) · [发布 v4.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v4.0.0) |
 | v3.1.0 | 2026-11-14 13:10 | Mermaid 本站托管，全站无 CDN 依赖；离线流程图测试；清理残留 CDN 代码。地址同 v3：[Pages](https://07-je-grok-love-personal-20260928.github.io/Belgic-Confession-GROKstudy/) · [Surge](https://belgic-confession-20261114-v3-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261114-v3-grokstudy.netlify.app/) · [发布 v3.1.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v3.1.0) |
 | v3.0.0 | 2026-11-14 | 地图集：七张成对地图（离线示意 + 多源实时底图，Leaflet 本站托管）；加深历史地理；笔记标记加厚。地址：[Pages](https://07-je-grok-love-personal-20260928.github.io/Belgic-Confession-GROKstudy/) · [Surge](https://belgic-confession-20261114-v3-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261114-v3-grokstudy.netlify.app/) · [发布 v3.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v3.0.0)（2026-11-14 12:58 台北） |
 | v2.0.0 | 2026-10-23 | 性能与阅读体验版：去掉重复毛玻璃、合并资源、按需加载；六种主题；笔记式标注与图例；柱状图与环形图；收紧内容。地址：[Surge](https://belgic-confession-20261023-v2-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261023-v2-grokstudy.netlify.app/) · [标签 v2.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v2.0.0) |
