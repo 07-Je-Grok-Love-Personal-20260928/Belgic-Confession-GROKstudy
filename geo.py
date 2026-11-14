@@ -23,12 +23,14 @@ def mapsvg(id, title, pts, routes=(), hl=(), bbox=(-1,14,46,54), W=1040, off=Non
     s += f'<rect x="0" y="0" width="{W}" height="{H}" rx="18" fill="url(#g{id})"/>'
     for gx in range(0,W,104): s += f'<line x1="{gx}" y1="0" x2="{gx}" y2="{H}" class="gr"/>'
     for gy in range(0,H,104): s += f'<line x1="0" y1="{gy}" x2="{W}" y2="{gy}" class="gr"/>'
-    for lab,lon,lat,rx,ry,c in blobs:
-        x,y = xy((lon,lat)); s += f'<ellipse cx="{x:.0f}" cy="{y:.0f}" rx="{rx*sx:.0f}" ry="{ry*sy:.0f}" fill="{c}" fill-opacity=".16" stroke="{c}" stroke-opacity=".5" stroke-dasharray="5 5"/><text x="{x:.0f}" y="{y-ry*sy-8:.0f}" text-anchor="middle" class="rg">{lab}</text>'
+    for bl in blobs:
+        lab,lon,lat,rx,ry,c = bl[:6]; below = len(bl)>6 and bl[6]=='below'
+        x,y = xy((lon,lat)); ly = y+ry*sy+20 if below else y-ry*sy-8
+        s += f'<ellipse cx="{x:.0f}" cy="{y:.0f}" rx="{rx*sx:.0f}" ry="{ry*sy:.0f}" fill="{c}" fill-opacity=".16" stroke="{c}" stroke-opacity=".5" stroke-dasharray="5 5"/><text x="{x:.0f}" y="{ly:.0f}" text-anchor="middle" class="rg">{lab}</text>'
     if rhine:
         d = " ".join(("M" if i==0 else "L")+f"{xy(p)[0]:.0f},{xy(p)[1]:.0f}" for i,p in enumerate(RHINE))
         s += f'<path d="{d}" class="river"/>'
-        rx_,ry_ = xy((8.30,49.0)); s += f'<text x="{rx_+10:.0f}" y="{ry_:.0f}" class="rvt">莱茵河（示意）</text>'
+        rx_,ry_ = xy((8.30,49.0)); ry_ = min(ry_, H-14); s += (f'<text x="{rx_+10:.0f}" y="{ry_:.0f}" class="rvt">莱茵河（示意）</text>' if rx_+150<W else f'<text x="{rx_-10:.0f}" y="{ry_:.0f}" text-anchor="end" class="rvt">莱茵河（示意）</text>')
     for a,b in routes:
         (x1,y1),(x2,y2) = xy(a),xy(b); mx,my=(x1+x2)/2,(y1+y2)/2-min(70,abs(x2-x1)*0.18+20)
         s += f'<path d="M{x1:.0f},{y1:.0f} Q{mx:.0f},{my:.0f} {x2:.0f},{y2:.0f}" class="route"/>'

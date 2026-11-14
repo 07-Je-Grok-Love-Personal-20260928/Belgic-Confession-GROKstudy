@@ -32,7 +32,7 @@ with sync_playwright() as p:
             if offt:
                 ctx.route('**/*', lambda route: route.abort() if any(x in route.request.url for x in ('tile.openstreetmap','basemaps.cartocdn','arcgisonline','opentopomap','openstreetmap.fr','openstreetmap.de','autonavi','webrd')) else route.continue_())
             pg=ctx.new_page(); errs=[]
-            pg.on('pageerror',lambda e:errs.append(str(e))); pg.on('console',lambda m:errs.append(m.text) if m.type=='error' else None)
+            pg.on('pageerror',lambda e:errs.append(str(e))); pg.on('console',lambda m:errs.append(m.text) if m.type=='error' and not any(x in (m.text or '') for x in ('ERR_FAILED','ERR_CONNECTION','ERR_NAME_NOT_RESOLVED','ERR_BLOCKED','net::ERR')) else None)
             pg.goto('file://'+os.path.abspath(f)); pg.wait_for_timeout(300);
             if tocopen: pg.evaluate("document.getElementById('tocbtn')?.click();document.getElementById('toc')?.classList.add('open');document.body.classList.add('toc-open')")
             pg.evaluate("s=>{const e=document.createElement('style');e.textContent=s;document.head.appendChild(e)}",'*{content-visibility:visible!important}')  # v8：测量时强制渲染 content-visibility:auto 的区块

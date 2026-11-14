@@ -116,7 +116,7 @@ def svg_bres():
 <text x="24" y="58" class="ssub">约 1522 蒙斯 → 伦敦避难 → 里尔地下 → 日内瓦受教 → 图尔奈写信条 → 色当 → 瓦朗谢讷殉道</text>
 <path class="dash" marker-end="url(#ar1)" d="M210,250 C160,180 200,90 250,80 C320,65 380,95 330,160 C280,230 360,250 430,200 C520,140 560,210 620,240 C700,280 760,300 790,270"/>
 <g class="pt" style="--c:#a78bfa"><circle cx="210" cy="250" r="9"/><text x="210" y="272" text-anchor="middle">① 蒙斯 出生</text></g>
-<g class="pt" style="--c:#5aa9e6"><circle cx="250" cy="80" r="9"/><text x="250" y="66" text-anchor="middle">② 伦敦 避难</text></g>
+<g class="pt" style="--c:#5aa9e6"><circle cx="250" cy="80" r="9"/><text x="236" y="98" text-anchor="end">② 伦敦 避难</text></g>
 <g class="pt" style="--c:#d4af37"><circle cx="330" cy="160" r="9"/><text x="355" y="155">③ 里尔 地下牧养</text></g>
 <g class="pt" style="--c:#6bb8d6"><circle cx="430" cy="200" r="9"/><text x="430" y="222" text-anchor="middle">④ 日内瓦 受教</text></g>
 <g class="pt pulse core" style="--c:#e07a5f"><circle cx="620" cy="240" r="12"/><text x="620" y="262" text-anchor="middle">⑤ 图尔奈 1561</text></g>
@@ -157,13 +157,13 @@ def svg_prov():
     for x,y,n,c in chips:
         big = n in ("图尔奈区","布拉班特","荷兰")
         g+=f'<g class="chip{" pulse" if n=="图尔奈区" else ""}" style="--c:{c}"><rect x="{x-52}" y="{y-16}" rx="10" width="104" height="{32 if not big else 34}"/><text x="{x}" y="{y+5}" text-anchor="middle">{n}</text></g>'
-    return f'''<svg class="sch" viewBox="0 0 760 420" role="img" aria-label="腓利二世治下低地十七省示意图">
+    return f'''<svg class="sch" viewBox="0 0 760 460" role="img" aria-label="腓利二世治下低地十七省示意图">
 <defs><linearGradient id="gb3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e2a22"/><stop offset="1" stop-color="#1a2038"/></linearGradient></defs>
-<rect width="760" height="420" rx="18" fill="url(#gb3)"/>
+<rect width="760" height="460" rx="18" fill="url(#gb3)"/>
 <text x="24" y="32" class="stitle">低地十七省 · 1549 实用诏令之后</text>
-<text x="24" y="54" class="ssub">拉丁文 Belgica＝整个低地，不单指今天的比利时。北（蓝）后来联合，南（金/红）多重新置于西班牙统治——大势，不是精确边界。</text>
-{g}
-<text x="24" y="404" class="sfoot">记忆钩：名字来自十七省；信条写在南部的图尔奈区。</text>
+<text x="24" y="54" class="ssub">拉丁文 Belgica＝整个低地，不单指今天的比利时。</text><text x="24" y="72" class="ssub">北（蓝）后来联合，南（金/红）多重新置于西班牙统治——大势，不是精确边界。</text>
+<g transform="translate(0,40)">{g}</g>
+<text x="24" y="444" class="sfoot">记忆钩：名字来自十七省；信条写在南部的图尔奈区。</text>
 </svg>'''
 
 def svg_mart():
@@ -202,12 +202,12 @@ def svg_refu():
 </svg>'''
 
 def svg_dort():
-    return '''<svg class="sch" viewBox="0 0 900 400" role="img" aria-label="多特大会示意图">
+    return '''<svg class="sch" viewBox="0 0 900 426" role="img" aria-label="多特大会示意图">
 <defs><linearGradient id="gb6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2040"/><stop offset="1" stop-color="#2a2410"/></linearGradient></defs>
-<rect width="900" height="400" rx="18" fill="url(#gb6)"/>
+<rect width="900" height="426" rx="18" fill="url(#gb6)"/>
 <text x="24" y="32" class="stitle">1618–19 · 多德雷赫特：一项国际会议</text>
-<text x="24" y="54" class="ssub">CCI：代表主要来自荷兰改革宗教会，另有 27 位来自其他国家的教会。BC 在此经文字修订，与 HC、Dort 合成三项联合信条。</text>
-<!-- hall -->
+<text x="24" y="54" class="ssub">CCI：代表主要来自荷兰改革宗教会，另有 27 位来自其他国家的教会。</text><text x="24" y="72" class="ssub">BC 在此经文字修订，与 HC、Dort 合成三项联合信条。</text>
+<g transform="translate(0,26)"><!-- hall -->
 <rect x="260" y="90" width="380" height="220" rx="14" fill="#243056" stroke="#d4af37" stroke-width="2"/>
 <rect x="300" y="120" width="300" height="28" rx="6" fill="#d4af37" opacity=".9"/>
 <text x="450" y="140" text-anchor="middle" fill="#1a1408" font-size="13" font-weight="700">多特大会主席台</text>
@@ -216,8 +216,8 @@ def svg_dort():
 <g class="pt" style="--c:#81b29a"><circle cx="200" cy="180" r="9"/><text x="200" y="162" text-anchor="middle">海德堡</text></g>
 <g class="pt" style="--c:#6bb8d6"><circle cx="160" cy="280" r="9"/><text x="160" y="302" text-anchor="middle">日内瓦等瑞士教会</text></g>
 <g class="pt" style="--c:#5aa9e6"><circle cx="720" cy="180" r="9"/><text x="720" y="162" text-anchor="middle">英国代表</text></g>
-<g class="pt pulse core" style="--c:#d4af37"><circle cx="450" cy="80" r="10"/><text x="450" y="68" text-anchor="middle">多德雷赫特</text></g>
-<text x="24" y="382" class="sfoot">记忆钩：Dort 不是另起炉灶，是为保护已有的恩典福音（拣选、十架、重生、持守）作国际裁决。</text>
+<g class="pt pulse core" style="--c:#d4af37"><circle cx="450" cy="80" r="10"/><text x="450" y="68" text-anchor="middle">多德雷赫特</text></g></g>
+<text x="24" y="408" class="sfoot">记忆钩：Dort 不是另起炉灶，是为保护已有的恩典福音（拣选、十架、重生、持守）作国际裁决。</text>
 </svg>'''
 
 def svg_world():
@@ -230,7 +230,7 @@ def svg_world():
     blobs=[(-100,45,90,40,BLUE,"北美"),(20,5,70,50,ORG,"非洲"),(10,50,50,28,GREEN,"欧洲"),
            (90,40,90,40,GOLD,"亚洲"),(134,-25,40,22,CY,"澳洲"),(120,-2,40,16,CY,"印尼")]
     b="".join(f'<ellipse cx="{xy(lo,la)[0]:.0f}" cy="{xy(lo,la)[1]:.0f}" rx="{rx}" ry="{ry}" fill="{c}" fill-opacity=".18" stroke="{c}" stroke-opacity=".4"/>'
-              f'<text x="{xy(lo,la)[0]:.0f}" y="{xy(lo,la)[1]+ry+12:.0f}" text-anchor="middle" class="rg">{lab}</text>' for lo,la,rx,ry,c,lab in blobs)
+              f'<text x="{xy(lo,la)[0]+(22 if lab=="非洲" else 0):.0f}" y="{xy(lo,la)[1]+(0 if lab=="非洲" else ry+12):.0f}" text-anchor="middle" class="rg">{lab}</text>' for lo,la,rx,ry,c,lab in blobs)
     o,dxy=xy(4.69,51.81)
     arcs=""
     for n,lo,la,c in cities[1:]:
@@ -240,7 +240,8 @@ def svg_world():
     pts=""
     for n,lo,la,c in cities:
         x,y=xy(lo,la)
-        pts+=f'<g class="pt" style="--c:{c}"><circle cx="{x:.0f}" cy="{y:.0f}" r="{12 if n=="多德雷赫特" else 7}"/><text x="{x:.0f}" y="{y-12:.0f}" text-anchor="middle">{n}</text></g>'
+        lx,ly,an={"开普敦":(x+12,y+18,"start"),"大急流城":(x-4,y-12,"end"),"汉密尔顿":(x+6,y-12,"start"),"阿纳海姆":(x,y+22,"middle"),"洛杉矶":(x-4,y-12,"end")}.get(n,(x,y-12,"middle"))
+        pts+=f'<g class="pt" style="--c:{c}"><circle cx="{x:.0f}" cy="{y:.0f}" r="{12 if n=="多德雷赫特" else 7}"/><text x="{lx:.0f}" y="{ly:.0f}" text-anchor="{an}">{n}</text></g>'
     return f'''<svg class="sch" viewBox="0 0 900 420" role="img" aria-label="三项联合信条在世界的传播示意图">
 <defs><linearGradient id="gb7" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1a33"/><stop offset="1" stop-color="#102210"/></linearGradient></defs>
 <rect width="900" height="420" rx="18" fill="url(#gb7)"/>
