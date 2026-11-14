@@ -9,7 +9,7 @@ def stats(fr):
     if len(fr)<5: return dict(fps=0,jank=0,p95=0,n=len(fr))
     tot=sum(fr) or 1
     s=sorted(fr)
-    return dict(fps=round(len(fr)/tot*1000,1), jank=sum(1 for x in fr if x>33), p95=round(s[int(len(s)*0.95)],1), n=len(fr))
+    return dict(fps=round(len(fr)/tot*1000,1), jank=sum(1 for x in fr if x>33), p95=round(s[int(len(s)*0.95)],1), max=round(s[-1]), n=len(fr))
 
 JS_START="()=>{window.__fr=[];window.__run=1;let last=performance.now();function f(t){window.__fr.push(t-last);last=t;if(window.__run)requestAnimationFrame(f)}requestAnimationFrame(f)}"
 JS_STOP="()=>{window.__run=0;const fr=window.__fr.slice(2);return fr}"

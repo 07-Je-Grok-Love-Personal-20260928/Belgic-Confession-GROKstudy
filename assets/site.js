@@ -130,7 +130,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 var box=d.getElementById('thm'),btn=d.getElementById('thmb');
 function cur(){return de.getAttribute('data-theme')||'night'}
 function mark(){[].forEach.call(d.querySelectorAll('[data-theme-set]'),function(b){b.setAttribute('aria-checked',b.getAttribute('data-theme-set')===cur())})}
-function set(t){de.classList.add('thx');if(t==='night')de.removeAttribute('data-theme');else de.setAttribute('data-theme',t);try{localStorage.setItem(K,t)}catch(e){}var m=d.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',C[t]);mark();setTimeout(function(){de.classList.remove('thx')},400)}
+function set(t){de.classList.add('thx');if(t==='night')de.removeAttribute('data-theme');else de.setAttribute('data-theme',t);try{localStorage.setItem(K,t)}catch(e){}var m=d.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',C[t]);mark();clearTimeout(set._t);set._t=setTimeout(function(){var r=function(){de.classList.remove('thx')};if(window.requestIdleCallback)requestIdleCallback(r,{timeout:3000});else r()},600)}
 if(box&&btn){btn.addEventListener('click',function(e){e.stopPropagation();var o=box.classList.toggle('open');btn.setAttribute('aria-expanded',o)});
  [].forEach.call(d.querySelectorAll('[data-theme-set]'),function(b){b.addEventListener('click',function(){set(b.getAttribute('data-theme-set'));box.classList.remove('open');btn.setAttribute('aria-expanded','false')})});
  d.addEventListener('click',function(e){if(!box.contains(e.target)){box.classList.remove('open');btn.setAttribute('aria-expanded','false')}});
