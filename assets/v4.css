@@ -142,3 +142,7 @@ html:is([data-theme=dawn],[data-theme=parch]) #toc .tk-row>a.on .tk-t,html:is([d
 /* v4 polish: icon-memory tiles — 2 roomy columns on phones, icon above text on narrow tiles */
 .icm-g{grid-template-columns:repeat(auto-fill,minmax(min(100%,138px),1fr))}
 @media (max-width:520px){.icm-g{grid-template-columns:repeat(2,minmax(0,1fr))}.icm-t small{font-size:.86rem}}
+/* v4 marks: only the label pill of a call box is a block; bold words inside the text stay inline */
+.call * b:first-child,.call * b{display:inline;margin:0}
+.call>b:first-child{display:flex;width:fit-content}
+.call>b:first-child+*{display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone}
