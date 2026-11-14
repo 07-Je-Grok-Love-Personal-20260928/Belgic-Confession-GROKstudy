@@ -116,6 +116,6 @@ OUT=perf.json python3 tools/perf3.py . index.html atlas.html  # 交互帧率
 
 | 版本 | 日期（台北时间） | 说明 |
 |---|---|---|
-| v3.0.0 | 2026-11-14 | 地图集：七张成对地图（离线示意 + 多源实时底图，Leaflet 本站托管）；加深历史地理；笔记标记加厚。地址：[Pages](https://07-je-grok-love-personal-20260928.github.io/Belgic-Confession-GROKstudy/) · [Surge](https://belgic-confession-20261114-v3-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261114-v3-grokstudy.netlify.app/) |
+| v3.0.0 | 2026-11-14 | 地图集：七张成对地图（离线示意 + 多源实时底图，Leaflet 本站托管）；加深历史地理；笔记标记加厚。地址：[Pages](https://07-je-grok-love-personal-20260928.github.io/Belgic-Confession-GROKstudy/) · [Surge](https://belgic-confession-20261114-v3-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261114-v3-grokstudy.netlify.app/) · [发布 v3.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v3.0.0)（2026-11-14 12:58 台北） |
 | v2.0.0 | 2026-10-23 | 性能与阅读体验版：去掉重复毛玻璃、合并资源、按需加载；六种主题；笔记式标注与图例；柱状图与环形图；收紧内容。地址：[Surge](https://belgic-confession-20261023-v2-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261023-v2-grokstudy.netlify.app/) · [标签 v2.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v2.0.0) |
 | v1.0.0 | 2026-10-23 | 首发。12 部分完整上线。地址：[Surge](https://belgic-confession-20261023-v1-grokstudy.surge.sh/) · [Netlify](https://belgic-confession-20261023-v1-grokstudy.netlify.app/) · [标签 v1.0.0](https://github.com/07-Je-Grok-Love-Personal-20260928/Belgic-Confession-GROKstudy/releases/tag/v1.0.0) |
