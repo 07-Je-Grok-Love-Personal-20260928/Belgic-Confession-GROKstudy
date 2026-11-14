@@ -14,9 +14,11 @@ function markRead(id){if(mine.indexOf(id)<0){mine.push(id);rd[PG]=mine;sv(KEY,rd
 function upd(){var c=$('#pgread');if(c)c.textContent=mine.length}
 mine.forEach(function(id){var a=links[id];if(a)a.classList.add('done')});
 var cur=null,band=new Set(),order=new Map();secs.forEach(function(x,i){order.set(x,i)});
+/* v4：跳过 content-visibility 尚未渲染的区块（位置是过期估计，会让高亮跳错） */
+function live(x){return !x.checkVisibility||x.checkVisibility({contentVisibilityAuto:true})}
 function setAct(id){if(id===cur)return;if(window.TK)TK.act(id);cur=id}
 if('IntersectionObserver'in window){
- var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});var best=null,bi=-1;band.forEach(function(x){var i=order.get(x);if(i>bi){bi=i;best=x}});if(best)setAct(best.id)},{rootMargin:'0px 0px -75% 0px'});
+ var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});var best=null,bi=-1;var lim=Math.max(88,innerHeight*.14);band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)&&x.getBoundingClientRect().top<=lim){bi=i;best=x}});if(!best)band.forEach(function(x){var i=order.get(x);if(i>bi&&live(x)){bi=i;best=x}});if(best)setAct(best.id)},{rootMargin:'0px 0px -75% 0px'});
  var ioR=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){markRead(e.target.id);ioR.unobserve(e.target)}})},{rootMargin:'0px 0px -40% 0px'});
  secs.forEach(function(x){ioA.observe(x);if(x.classList.contains('l2'))ioR.observe(x)})}
 var p=$('#prog'),H=0,de=d.documentElement;function measure(){H=Math.max(1,de.scrollHeight-innerHeight)}measure();

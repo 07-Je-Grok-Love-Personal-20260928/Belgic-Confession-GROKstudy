@@ -18,10 +18,8 @@ if(first){var c=$('.tk1.is-cur',nav);if(c)open[sidOf(c)]=1}
 nav.addEventListener('click',function(e){
   var t=e.target.closest('.tk-tg');if(t){var li=t.closest('.tk-i');setOpen(li,!li.classList.contains('open'));e.preventDefault();return}
   var bt=e.target.closest('[data-tk]');if(bt){var k=bt.getAttribute('data-tk');
-    if(k==='open')items.forEach(function(li){setOpen(li,1,false)});
-    else if(k==='close')items.forEach(function(li){setOpen(li,0,false)});
-    else if(k==='cur'){reveal(true)}
-    persist();return}
+    if(k==='open')TK.expandAll();else if(k==='close')TK.collapseAll();else if(k==='cur')reveal(true);
+    return}
   var a=e.target.closest('a');if(a&&!wide())hide();
 });
 /* ---------- 显示 / 隐藏 ---------- */
@@ -73,6 +71,9 @@ var rv=0;function reveal(force){if(!cur)return;
   if(force){var p=cur.closest('.tk-i').parentElement.closest('.tk-i');while(p){setOpen(p,1,false);p=p.parentElement.closest('.tk-i')}persist()}
   cancelAnimationFrame(rv);rv=requestAnimationFrame(function(){var t=visibleTarget();if(!t)return;var br=body.getBoundingClientRect(),r=t.getBoundingClientRect();
     if(force||r.top<br.top+8||r.bottom>br.bottom-8)body.scrollTop+=r.top-br.top-br.height*0.35})}
-window.TK={act:act,show:show,hide:hide,isOpen:isOpen,setWidth:function(v){return apply(v,false)},limits:lim,
-  expandAll:function(){items.forEach(function(li){setOpen(li,1,false)});persist()},collapseAll:function(){items.forEach(function(li){setOpen(li,0,false)});persist()}};
+var xa=0;window.TK={act:act,show:show,hide:hide,isOpen:isOpen,setWidth:function(v){return apply(v,false)},limits:lim,
+  expandAll:function(sync){var q=items.filter(function(li){return li.classList.contains('has')&&!li.classList.contains('open')});cancelAnimationFrame(xa);
+    if(sync||q.length<60){q.forEach(function(li){setOpen(li,1,false)});persist();return}
+    var i=0;(function step(){var e=Math.min(q.length,i+48);for(;i<e;i++)setOpen(q[i],1,false);if(i<q.length)xa=requestAnimationFrame(step);else persist()})()},
+  collapseAll:function(){cancelAnimationFrame(xa);items.forEach(function(li){setOpen(li,0,false)});persist()}};
 })();

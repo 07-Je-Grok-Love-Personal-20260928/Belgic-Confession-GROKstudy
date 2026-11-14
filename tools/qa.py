@@ -33,6 +33,19 @@ JS_VCLIP='''()=>{const out=[];document.querySelectorAll('main *').forEach(el=>{
    const rg=document.createRange(); rg.selectNodeContents(n); for(const q of rg.getClientRects()){ if(q.height&&(q.bottom>r.bottom+2||q.top<r.top-2)){bad=n.textContent.trim().slice(0,16);break} } if(bad) break; }
  if(bad) out.push(el.tagName+'.'+String(el.className).slice(0,24)+':'+bad+' '+el.scrollHeight+'>'+el.clientHeight);
  });return out.slice(0,6)}'''
+JS_TOC='''()=>{const nav=document.getElementById('toc');if(!nav)return ['无目录'];const out=[],N=nav.getBoundingClientRect();
+ if(getComputedStyle(nav).visibility==='hidden')return ['目录未打开'];
+ const bx=document.getElementById('tkbody').getBoundingClientRect();
+ nav.querySelectorAll('.tk-head *, .tk-row, .tk-row > *, .tk-t, .tk-n').forEach(el=>{const r=el.getBoundingClientRect();if(!r.width||!r.height)return;
+   if(r.right>N.right-1+1||r.left<N.left-1) out.push('横向越界:'+el.className+':'+(el.textContent||'').trim().slice(0,14)+' '+Math.round(r.right)+'>'+Math.round(N.right));
+   const cs=getComputedStyle(el); if(el.scrollWidth>el.clientWidth+2&&(cs.overflowX==='hidden'||cs.overflowX==='clip')) out.push('裁切:'+(el.textContent||'').trim().slice(0,14));});
+ const rows=[...nav.querySelectorAll('.tk-row')].filter(r=>r.offsetParent).map(r=>r.getBoundingClientRect());
+ for(let i=1;i<rows.length;i++){ if(rows[i].top<rows[i-1].bottom-1.5) {out.push('行重叠@'+i);break} }
+ const hs=[...nav.querySelectorAll('.tk-head > *, .tk-tools > *')].filter(e=>e.offsetParent).map(e=>e.getBoundingClientRect());
+ for(let i=0;i<hs.length;i++)for(let j=i+1;j<hs.length;j++){const a=hs[i],b=hs[j];if(a.left<b.right-1&&b.left<a.right-1&&a.top<b.bottom-1&&b.top<a.bottom-1&&!(a.left<=b.left&&a.right>=b.right&&a.top<=b.top&&a.bottom>=b.bottom)&&!(b.left<=a.left&&b.right>=a.right&&b.top<=a.top&&b.bottom>=a.bottom))out.push('目录头部重叠 '+i+'/'+j)}
+ if(innerWidth>=1100){const m=document.getElementById('main').getBoundingClientRect(); if(m.left<N.right-1) out.push('正文被目录压住 '+Math.round(m.left)+'<'+Math.round(N.right))}
+ const all=nav.querySelectorAll('.tk-i.has').length, op=nav.querySelectorAll('.tk-i.has.open').length; if(all!==op) out.push('未全部展开 '+op+'/'+all);
+ return out.slice(0,6)}'''
 JS_VIS='''()=>{let n=0,bad=[];document.querySelectorAll('.reveal').forEach(e=>{const o=parseFloat(getComputedStyle(e).opacity);if(o<0.99){n++;if(bad.length<3)bad.push(e.className.slice(0,30))}});return {hidden:n,bad:bad,js:document.documentElement.classList.contains('js')}}'''
 res=[];fail=0
 with sync_playwright() as p:
@@ -46,7 +59,8 @@ with sync_playwright() as p:
             pg=ctx.new_page(); errs=[]
             pg.on('pageerror',lambda e:errs.append(str(e))); pg.on('console',lambda m:errs.append(m.text) if m.type=='error' and not any(x in (m.text or '') for x in ('ERR_FAILED','ERR_CONNECTION','ERR_NAME_NOT_RESOLVED','ERR_BLOCKED','net::ERR')) else None)
             pg.goto('file://'+os.path.abspath(f)); pg.wait_for_timeout(300);
-            if tocopen: pg.evaluate("document.getElementById('tocbtn')?.click();document.getElementById('toc')?.classList.add('open');document.body.classList.add('toc-open')")
+            if tocopen:
+                pg.evaluate("m=>{TK.show();const l=TK.limits();TK.setWidth(m==='max'?l[1]:l[0]);TK.expandAll(true)}",os.environ.get('TOCW','min')); pg.wait_for_timeout(450)
             pg.evaluate("s=>{const e=document.createElement('style');e.textContent=s;document.head.appendChild(e)}",'*{content-visibility:visible!important}')  # v8：测量时强制渲染 content-visibility:auto 的区块
             if opn: pg.evaluate("document.querySelectorAll('details').forEach(e=>e.open=true)")
             if not nojs:
@@ -56,6 +70,9 @@ with sync_playwright() as p:
                 pg.evaluate('window.scrollTo(0,0)'); pg.wait_for_timeout(200)
             ov=pg.evaluate(JS_OVER); cl=pg.evaluate(JS_CLIP); vis=pg.evaluate(JS_VIS); vc=pg.evaluate(JS_VCLIP) if os.environ.get('VCLIP','1')=='1' else []
             bad=[]
+            if tocopen:
+                tq=pg.evaluate(JS_TOC)
+                if tq: bad.append(f"目录问题: {tq}")
             if ov['sw']>ov['vw']+1: bad.append(f"页面横向溢出 sw={ov['sw']} vw={ov['vw']}")
             if ov['n']: bad.append(f"元素越界 {ov['n']}: {ov['over']}")
             if cl: bad.append(f"文字被裁切: {cl}")
@@ -70,4 +87,4 @@ with sync_playwright() as p:
             if bad: fail+=1; print(tag,f,w,bad)
             ctx.close()
     b.close()
-print('QA',('nojs' if nojs else 'rm' if rm else 'normal'),'theme='+os.environ.get('THEME','night'),'open' if opn else 'collapsed','pages',len(pages),'widths',W,'fails',fail)
+print('QA',('toc='+os.environ.get('TOCW','min')) if tocopen else '',('nojs' if nojs else 'rm' if rm else 'normal'),'theme='+os.environ.get('THEME','night'),'open' if opn else 'collapsed','pages',len(pages),'widths',W,'fails',fail)
